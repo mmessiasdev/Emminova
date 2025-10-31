@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/steps",
+      "handler": "steps.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/steps/:id",
+      "handler": "steps.findOne",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

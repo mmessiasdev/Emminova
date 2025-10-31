@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/testimonials",
+      "handler": "testimonials.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/testimonials/:id",
+      "handler": "testimonials.findOne",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

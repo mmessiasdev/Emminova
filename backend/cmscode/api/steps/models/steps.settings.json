@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "steps",
+  "info": {
+    "name": "steps",
+    "description": "Passo a passo"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "step_number": {
+      "type": "integer",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

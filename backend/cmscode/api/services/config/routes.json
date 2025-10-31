@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/services",
+      "handler": "services.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/:id",
+      "handler": "services.findOne",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
