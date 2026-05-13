@@ -1,0 +1,11 @@
+{
+    "routes": [{
+        "method": "POST",
+        "path": "/mercado-pago/card-token",
+        "handler": "mercado-pago.createCardToken",
+        "config": {
+            "policies": []
+        }
+    }
+    ]
+}

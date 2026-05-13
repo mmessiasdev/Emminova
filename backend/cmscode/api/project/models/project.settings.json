@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "doc_projects",
+  "info": {
+    "name": "project",
+    "description": "Project model for documentation system"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "enterprise": {
+      "model": "enterprise",
+      "via": "projects"
+    },
+    "topics": {
+      "collection": "topic",
+      "via": "project"
+    }
+  }
+}

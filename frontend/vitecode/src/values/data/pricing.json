@@ -1,0 +1,27 @@
+{
+    "plan": {
+        "name": "Plano Profissional",
+        "badge": "Plano Único & Completo",
+        "description": "Toda a potência do {brandingName} para o seu negócio",
+        "price": "R$ 39,90",
+        "period": "/ por TV cadastrada",
+        "note": "Sem taxas de adesão ou fidelidade oculta",
+        "cta": "Falar com um Consultor",
+        "features": [
+            "Usuários Ilimitados",
+            "TVs ilimitadas (cobrança por unidade)",
+            "Suporte a Vídeos 4K (H.264/H.265)",
+            "Suporte nativo a YouTube e Sites Web",
+            "Integração Completa com Power BI",
+            "Backup Diário Automático de Conteúdo",
+            "Suporte a Múltiplos Locais/Franquias",
+            "Modo Offline-First Inteligente",
+            "Agendamento e Transmissão em Tempo Real",
+            "Gestão Remota e Monitoramento 24/7",
+            "Suporte Técnico Humanizado via WhatsApp",
+            "Acesso Antecipado a Novos Recursos"
+        ]
+    },
+    "footer_note": "Precisa de uma solução em larga escala com mais de 50 telas?",
+    "footer_cta": "Consulte condições especiais."
+}

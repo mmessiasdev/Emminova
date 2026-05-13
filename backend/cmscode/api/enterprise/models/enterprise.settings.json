@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "doc_enterprises",
+  "info": {
+    "name": "enterprise",
+    "description": "Enterprise model for documentation system"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "profile": {
+      "model": "profile",
+      "via": "enterprise"
+    },
+    "projects": {
+      "collection": "project",
+      "via": "enterprise"
+    }
+  }
+}

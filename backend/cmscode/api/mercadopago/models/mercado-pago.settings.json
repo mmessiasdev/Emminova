@@ -1,0 +1,12 @@
+{
+    "kind": "collectionType",
+    "collectionName": "mercado_pagos",
+    "info": {
+      "name": "mercado-pago"
+    },
+    "options": {
+      "draftAndPublish": false
+    },
+    "attributes": {}
+  }
+  

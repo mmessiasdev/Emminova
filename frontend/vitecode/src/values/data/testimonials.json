@@ -1,0 +1,29 @@
+{
+    "title": "Como é ser um cliente Emminova?",
+    "items": [
+        {
+            "quote": "O atendimento da Emminova é diferenciado! Eles estão sempre disponíveis para ajudar e tirar dúvidas.",
+            "name": "Ana Rodrigues",
+            "role": "Gerente de RH",
+            "company": "TechCorp"
+        },
+        {
+            "quote": "Depois que a consutoria de TI fez um levantamento das necessidades da empresa, minha operação mudou completamente. Hoje temos processos bem definidos e automatizados, o que aumentou significativamente a eficiência da equipe.",
+            "name": "Carlos Mendes",
+            "role": "Diretor Comercial",
+            "company": "Varejo Plus"
+        },
+        {
+            "quote": "Hoje minha operação funciona de forma totalmente automatizada e integrada. Recebo relatórios semanais com todos os dados que preciso, o que me permite tomar decisões mais rápidas e assertivas.",
+            "name": "Mariana Costa",
+            "role": "Coordenadora de TI",
+            "company": "Rede Smart"
+        }
+    ],
+    "highlight": {
+        "quote": "Depois de me tornar um cliente Emminova, minha operação mudou completamente. Aumentamos o nosso faturamento significativamente graças as soluções que vocês trouxeram.",
+        "name": "Ricardo Lima",
+        "role": "CEO",
+        "company": "Grupo Alfa"
+    }
+}

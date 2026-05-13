@@ -1,0 +1,14 @@
+{
+    "title": "Empresas que já automatizam com {brandingName}",
+    "companies": [
+        {
+            "name": "Grupo Conect",
+            "logo": "https://grupoconnectba.com.br/wp-content/uploads/2024/10/logo-grupo-connect.svg",
+            "width": "h-6"
+        },
+        {
+            "name": "Emminova Solutions",
+            "width": "h-8"
+        }
+    ]
+}

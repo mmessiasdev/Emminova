@@ -1,0 +1,51 @@
+{
+    "title": "Por que aceleramos aceleramos <br /> seu negócio?",
+    "description": "Veja abaixo o porque somos a melhor empresa de soluções para seu negócio.",
+    "items": [
+        {
+            "id": "01",
+            "icon": "CloudOff",
+            "title": "Desenvolvimento moderno e tecnológico",
+            "description": "Aplicamos as melhores práticas de desenvolvimento de software, utilizando as tecnologias mais modernas do mercado para garantir um produto de alta qualidade e desempenho.",
+            "image": "/images/offline.png",
+            "imageAlt": "Tela de modo offline",
+            "wide": true
+        },
+        {
+            "id": "02",
+            "icon": "BarChart3",
+            "title": "IA de ponta a ponta",
+            "description": "Utilizamos IA para automatizar processos repetitivos, analisar dados e fornecer insights valiosos para o seu negócio.",
+            "image": "/images/powerbi.png",
+            "imageAlt": "Dashboard Power BI",
+            "wide": false
+        },
+        {
+            "id": "03",
+            "icon": "MonitorPlay",
+            "title": "Metodologia ágil",
+            "description": "Utilizamos metodologias ágeis para garantir um desenvolvimento rápido e flexível, atendendo às necessidades do seu negócio. Com entregas contínuas, você acompanha cada etapa e garante que o produto atenda perfeitamente às necessidades da sua empresa.",
+            "image": "/images/adicionar conteudo youtube.png",
+            "imageAlt": "Conteudo YouTube",
+            "wide": false
+        },
+        {
+            "id": "04",
+            "icon": "Moon",
+            "title": "Suporte Humanizado e Ágil",
+            "description": "Nossa equipe está pronta para ajudar em cada etapa do processo, desde o desenvolvimento até a implementação e manutenção do produto. Com um suporte técnico especializado, oferecemos soluções rápidas e eficientes para garantir que sua empresa tenha a melhor experiência possível.",
+            "image": "/images/blackouts.png",
+            "imageAlt": "Configuração de Blackout",
+            "wide": false
+        },
+        {
+            "id": "05",
+            "icon": "Tv",
+            "title": "O andamento da sua solução na palma da sua mão",
+            "description": "Acompanhe o desenvolvimento da sua solução em tempo real, com atualizações constantes e transparência total. Você terá acesso a todas as etapas do projeto, desde o planejamento até a implementação, garantindo que o produto final atenda perfeitamente às necessidades da sua empresa.",
+            "image": "/images/tvs.png",
+            "imageAlt": "Painel de TVs",
+            "wide": false
+        }
+    ]
+}

@@ -61,6 +61,10 @@
     "resetPasswordExpires": {
       "type": "datetime",
       "private": true
+    },
+    "profile": {
+      "model": "profile",
+      "via": "user"
     }
   }
 }

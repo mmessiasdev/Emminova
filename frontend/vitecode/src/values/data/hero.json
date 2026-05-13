@@ -1,0 +1,13 @@
+{
+    "title": "Nós resolvemos <span class=\"text-primary\">seu problema</span> com tecnologia.",
+    "description": "Somos a melhor empresa de soluções de software da Bahia. Usamos as melhores práticas do mercado para transformar a maneira como sua empresa opera.",
+    "cta_primary": {
+        "text": "Fale conosco",
+        "link": "/contact/demo"
+    },
+    "cta_secondary": {
+        "text": "Nossos produtos",
+        "link": "/contact"
+    },
+    "video_url": "/HeroAnimation_optimized.mp4"
+}

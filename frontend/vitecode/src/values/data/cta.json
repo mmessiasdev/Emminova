@@ -1,0 +1,11 @@
+{
+    "title": "A melhor empresa de tecnologia do mercado.",
+    "cta_primary": {
+        "text": "Conheça nossos produtos",
+        "link": "/contact/demo"
+    },
+    "cta_secondary": {
+        "text": "Agendar uma reunião",
+        "link": "/contact"
+    }
+}

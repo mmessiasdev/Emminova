@@ -1,0 +1,38 @@
+{
+    "title": "Como a Emminova resolve seu problema?",
+    "description": "Em {totalSteps} passos, nós levamos a sua empresa a outro patamar!",
+    "items": [
+        {
+            "id": "01",
+            "icon": "Tv",
+            "title": "Reunião de aprsentação e coleta de requisitos",
+            "description": "Reunião com os responsáveis da sua operação para entender as dores e necessidades do negócio. Nessa reunião já saímos com um escopo completo do que será feito durante todo o ciclo de vida do projeto.",
+            "image": "/images/playstore.png",
+            "imageAlt": "Reunião de aprsentação e coleta de requisitos"
+        },
+        {
+            "id": "02",
+            "icon": "Link2",
+            "title": "Reuniões periodicas com sua equipe.",
+            "description": "Reuniões semanais com a sua equipe para apresentar o andamento do projeto e tirar dúvidas.",
+            "image": "/images/codigo%20parear.jpeg",
+            "imageAlt": "Reuniões periodicas com sua equipe"
+        },
+        {
+            "id": "03",
+            "icon": "ListVideo",
+            "title": "Desenvolvimento e testes",
+            "description": "Nessa fase, nossa equipe irá desenvolver e testar o projeto, garantindo que ele atenda às suas necessidades.",
+            "image": "/images/criar%20playlist.png",
+            "imageAlt": "Desenvolvimento e testes"
+        },
+        {
+            "id": "04",
+            "icon": "ListVideo",
+            "title": "Lançamento e suporte",
+            "description": "Nossa equipe irá realizar o lançamento do projeto e fornecer suporte a você caso precise, garantindo que tenha a melhor experiência possível.",
+            "image": "/images/criar%20playlist.png",
+            "imageAlt": "Lançamento e suporte"
+        }
+    ]
+}
