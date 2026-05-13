@@ -273,3 +273,25 @@ export const contentApi = {
     return request<Content>(`/contents/${id}`, { method: "DELETE" });
   },
 };
+
+// ─── Upload ────────────────────────────────────────────────
+
+export const uploadApi = {
+  async upload(file: File) {
+    const formData = new FormData();
+    formData.append("files", file);
+
+    const res = await fetch(`${API_URL}/upload`, {
+      method: "POST",
+      headers: {
+        ...authHeaders(),
+        // Note: Do NOT set Content-Type for FormData, browser does it with boundary
+      },
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("Falha no upload");
+    const data = await res.json();
+    return data[0]; // Returns the first uploaded file object
+  },
+};

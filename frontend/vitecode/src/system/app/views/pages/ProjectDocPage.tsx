@@ -1,30 +1,33 @@
 /**
  * VIEW — Project Documentation Page: manages topics → subtopics → contents.
- * Sidebar navigation with a rich Markdown editor.
+ * Sidebar navigation with a rich Markdown editor supporting file uploads and YouTube.
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@app/controllers/AuthController";
 import {
-  projectApi, topicApi, subtopicApi, contentApi,
+  projectApi, topicApi, subtopicApi, contentApi, uploadApi,
   type Project, type Topic, type Subtopic, type Content,
 } from "@app/models/api";
-import { cn } from "@app/lib/utils";
+import { cn, extractYouTubeId } from "@app/lib/utils";
 import { branding } from "@/values/config/branding";
 import {
   ArrowLeft, Plus, Loader2, ChevronDown, ChevronRight,
   FileText, FolderOpen, Trash2, Pencil, Save, X, BookOpen,
   Bold, Italic, List, ListOrdered, Code, Image as ImageIcon,
   Link as LinkIcon, Quote, AlertCircle, Heading1, Heading2,
-  Heading3, Eye, Type, MessageSquare, AlertTriangle, Info,
-  Minus, CheckCircle2, Copy, Highlighter
+  Heading3, Heading4, Heading5, Eye, Type, MessageSquare, AlertTriangle, Info,
+  Minus, CheckCircle2, Copy, Highlighter, Upload, Youtube,
+  FileUp, PlayCircle, Download
 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { motion, AnimatePresence } from "framer-motion";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 
 const ProjectDocPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,6 +51,7 @@ const ProjectDocPage = () => {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Inline add forms
   const [addTopicOpen, setAddTopicOpen] = useState(false);
@@ -215,24 +219,61 @@ const ProjectDocPage = () => {
     }, 0);
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSaving(true);
+    try {
+      const uploaded = await uploadApi.upload(file);
+      const url = uploaded.url.startsWith("http") ? uploaded.url : `${API_URL}${uploaded.url}`;
+
+      if (file.type.startsWith("image/")) {
+        insertText(`![${file.name}](${url})`, "");
+      } else if (file.type.startsWith("video/")) {
+        insertText(`\n<video controls src="${url}" class="w-full rounded-2xl my-4"></video>\n`, "");
+      } else {
+        insertText(`[📄 ${file.name}](${url})`, "");
+      }
+    } catch (err) {
+      alert("Falha ao subir arquivo.");
+    } finally {
+      setSaving(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleYoutubeInsert = () => {
+    const url = prompt("Cole o link do vídeo do YouTube:");
+    if (!url) return;
+    const id = extractYouTubeId(url);
+    if (!id) {
+      alert("Link do YouTube inválido.");
+      return;
+    }
+    insertText(`\n<youtube id="${id}"></youtube>\n`, "");
+  };
+
   const toolbarButtons = [
     { icon: <Heading1 size={16} />, action: () => insertText("# ", ""), label: "H1" },
     { icon: <Heading2 size={16} />, action: () => insertText("## ", ""), label: "H2" },
     { icon: <Heading3 size={16} />, action: () => insertText("### ", ""), label: "H3" },
+    { icon: <Heading4 size={16} />, action: () => insertText("#### ", ""), label: "H4" },
+    { icon: <Heading5 size={16} />, action: () => insertText("##### ", ""), label: "H5" },
     { icon: <Bold size={16} />, action: () => insertText("**", "**", "negrito"), label: "Negrito" },
     { icon: <Italic size={16} />, action: () => insertText("_", "_", "itálico"), label: "Itálico" },
     { icon: <List size={16} />, action: () => insertText("- ", ""), label: "Lista" },
     { icon: <ListOrdered size={16} />, action: () => insertText("1. ", ""), label: "Lista Numerada" },
     { icon: <Code size={16} />, action: () => insertText("```javascript\n", "\n```", "código aqui"), label: "Bloco de Código" },
-    { icon: <LinkIcon size={16} />, action: () => insertText("[", "](url)", "link"), label: "Link" },
-    { icon: <ImageIcon size={16} />, action: () => insertText("![", "](url_da_imagem)", "descrição"), label: "Imagem" },
+    { icon: <FileUp size={16} />, action: () => fileInputRef.current?.click(), label: "Subir Arquivo" },
+    { icon: <Youtube size={16} />, action: handleYoutubeInsert, label: "Vídeo YouTube" },
     { icon: <Quote size={16} />, action: () => insertText("> ", ""), label: "Citação" },
     { icon: <Highlighter size={16} />, action: () => insertText("<mark>", "</mark>", "destaque"), label: "Grifar" },
+    { icon: <Type size={14} />, action: () => insertText("<small>", "</small>", "texto pequeno"), label: "Texto Menor" },
     { icon: <Minus size={16} />, action: () => insertText("\n---\n", ""), label: "Divisor" },
-    { icon: <Info size={16} />, action: () => insertText("\n:::info\n", "\n:::", "Informação relevante aqui"), label: "Aviso Info" },
-    { icon: <AlertTriangle size={16} />, action: () => insertText("\n:::warning\n", "\n:::", "Cuidado necessário aqui"), label: "Aviso Warning" },
-    { icon: <AlertCircle size={16} />, action: () => insertText("\n:::danger\n", "\n:::", "Erro ou Perigo aqui"), label: "Aviso Danger" },
-    { icon: <MessageSquare size={16} />, action: () => insertText("@", ""), label: "Menção" },
+    { icon: <Info size={16} />, action: () => insertText("\n:::info\n", "\n:::", "Informação"), label: "Aviso Info" },
+    { icon: <AlertTriangle size={16} />, action: () => insertText("\n:::warning\n", "\n:::", "Aviso"), label: "Aviso Warning" },
+    { icon: <AlertCircle size={16} />, action: () => insertText("\n:::danger\n", "\n:::", "Perigo"), label: "Aviso Danger" },
   ];
 
   // Markdown Custom Components
@@ -255,19 +296,47 @@ const ProjectDocPage = () => {
         </code>
       )
     },
-    // Custom Alert Renderers (we'll use a hacky way since standard markdown doesn't have ::: syntax)
-    // Actually, we can just look for text patterns or use a remark plugin if we were more advanced.
-    // For now, let's just use standard blocks and maybe custom tags.
     p: ({ children }: any) => {
-      const content = String(children);
-      if (typeof children === 'string' || (Array.isArray(children) && typeof children[0] === 'string')) {
-        const text = Array.isArray(children) ? children.join('') : children;
-        if (text.startsWith(':::info')) return <div className="bg-blue-500/10 border-l-4 border-blue-500 p-4 my-4 rounded-r-xl flex gap-3"><Info className="text-blue-500 shrink-0" size={20} /> <div className="text-sm">{text.replace(':::info', '').replace(':::', '')}</div></div>;
-        if (text.startsWith(':::warning')) return <div className="bg-amber-500/10 border-l-4 border-amber-500 p-4 my-4 rounded-r-xl flex gap-3"><AlertTriangle className="text-amber-500 shrink-0" size={20} /> <div className="text-sm">{text.replace(':::warning', '').replace(':::', '')}</div></div>;
-        if (text.startsWith(':::danger')) return <div className="bg-red-500/10 border-l-4 border-red-500 p-4 my-4 rounded-r-xl flex gap-3"><AlertCircle className="text-red-500 shrink-0" size={20} /> <div className="text-sm">{text.replace(':::danger', '').replace(':::', '')}</div></div>;
+      // Find ::: strings in children
+      const text = React.Children.toArray(children).join("");
+
+      if (text.startsWith(':::info')) {
+        return (
+          <div className="bg-blue-500/10 border-l-4 border-blue-500 p-4 my-4 rounded-r-xl flex gap-3">
+            <Info className="text-blue-500 shrink-0" size={20} />
+            <div className="text-sm prose-p:my-0 prose-p:leading-normal">{text.replace(/:::info|:::/g, '').trim()}</div>
+          </div>
+        );
+      }
+      if (text.startsWith(':::warning')) {
+        return (
+          <div className="bg-amber-500/10 border-l-4 border-amber-500 p-4 my-4 rounded-r-xl flex gap-3">
+            <AlertTriangle className="text-amber-500 shrink-0" size={20} />
+            <div className="text-sm prose-p:my-0 prose-p:leading-normal">{text.replace(/:::warning|:::/g, '').trim()}</div>
+          </div>
+        );
+      }
+      if (text.startsWith(':::danger')) {
+        return (
+          <div className="bg-red-500/10 border-l-4 border-red-500 p-4 my-4 rounded-r-xl flex gap-3">
+            <AlertCircle className="text-red-500 shrink-0" size={20} />
+            <div className="text-sm prose-p:my-0 prose-p:leading-normal">{text.replace(/:::danger|:::/g, '').trim()}</div>
+          </div>
+        );
       }
       return <p className="mb-4 leading-relaxed">{children}</p>;
-    }
+    },
+    // Custom tag for youtube
+    youtube: ({ id }: { id: string }) => (
+      <div className="aspect-video w-full rounded-2xl overflow-hidden my-6 border border-border shadow-2xl">
+        <iframe
+          src={`https://www.youtube.com/embed/${id}`}
+          className="w-full h-full"
+          allowFullScreen
+          title="YouTube Video"
+        />
+      </div>
+    ),
   };
 
   if (loading) {
@@ -280,6 +349,14 @@ const ProjectDocPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        className="hidden"
+      />
+
       {/* Header */}
       <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="px-4 md:px-6 h-14 flex items-center gap-3">
@@ -601,7 +678,13 @@ const ProjectDocPage = () => {
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex-1 prose prose-sm dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-primary prose-img:rounded-2xl prose-pre:bg-transparent prose-pre:p-0"
+                      className="flex-1 prose prose-sm md:prose-base dark:prose-invert max-w-none 
+                        prose-h1:text-4xl prose-h1:font-black prose-h1:mb-6 prose-h1:tracking-tight
+                        prose-h2:text-3xl prose-h2:font-extrabold prose-h2:mt-8 prose-h2:mb-4
+                        prose-h3:text-2xl prose-h3:font-bold prose-h3:mt-6 prose-h3:mb-3
+                        prose-h4:text-xl prose-h4:font-bold prose-h4:mt-4 prose-h4:mb-2
+                        prose-h5:text-lg prose-h5:font-semibold prose-h5:mt-4 prose-h5:mb-2
+                        prose-p:leading-relaxed prose-img:rounded-2xl prose-pre:bg-transparent prose-pre:p-0"
                     >
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
