@@ -324,7 +324,7 @@ const ProjectDocPage = () => {
           </div>
         );
       }
-      return <p className="mb-4 leading-relaxed">{children}</p>;
+      return <p>{children}</p>;
     },
     // Custom tag for youtube
     youtube: ({ id }: { id: string }) => (
@@ -348,7 +348,7 @@ const ProjectDocPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Hidden File Input */}
       <input
         type="file"
@@ -358,51 +358,50 @@ const ProjectDocPage = () => {
       />
 
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="px-4 md:px-6 h-14 flex items-center gap-3">
-          <button
-            onClick={() => navigate("/app")}
-            className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          <div className="flex items-center gap-2">
-            <img src={branding.logo} alt={branding.name} className="h-6 object-contain" />
-            <span className="text-muted-foreground">/</span>
-            <BookOpen className="w-4 h-4 text-primary" />
-            <h1 className="text-sm font-semibold truncate max-w-[150px] md:max-w-none">
-              {project?.name || "Projeto"}
-            </h1>
-          </div>
+      <header className="h-14 shrink-0 bg-background/80 backdrop-blur-xl border-b border-border flex items-center px-4 md:px-6 gap-3 z-50">
+        <button
+          onClick={() => navigate("/app")}
+          className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </button>
+        <div className="flex items-center gap-2">
+          <img src={branding.logo} alt={branding.name} className="h-6 object-contain" />
+          <span className="text-muted-foreground">/</span>
+          <BookOpen className="w-4 h-4 text-primary" />
+          <h1 className="text-sm font-semibold truncate max-w-[150px] md:max-w-none">
+            {project?.name || "Projeto"}
+          </h1>
+        </div>
 
-          <div className="ml-auto flex items-center gap-2">
-             {selectedContent && (
-               <button
-                onClick={handleSave}
-                disabled={saving}
-                className="h-9 px-4 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 transition-all shadow-glow"
-              >
-                {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3" /> Salvar</>}
-              </button>
-             )}
-
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors"
+        <div className="ml-auto flex items-center gap-2">
+           {selectedContent && (
+             <button
+              onClick={handleSave}
+              disabled={saving}
+              className="h-9 px-4 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 transition-all shadow-glow"
             >
-              <FolderOpen className="w-4 h-4" />
+              {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3" /> Salvar</>}
             </button>
-          </div>
+           )}
+
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors"
+          >
+            <FolderOpen className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
         {/* Sidebar */}
         <aside
+          data-lenis-prevent
           className={cn(
-            "w-72 border-r border-border bg-card flex-shrink-0 overflow-y-auto transition-transform duration-300",
-            "fixed md:relative inset-y-0 left-0 z-40 md:z-0 pt-14 md:pt-0",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+            "w-72 border-r border-border bg-card flex-shrink-0 overflow-y-auto transition-transform duration-300 min-h-0",
+            "fixed md:relative inset-y-0 left-0 z-40 md:z-0 md:translate-x-0 pt-14 md:pt-0",
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
           <div className="p-4">
@@ -578,21 +577,6 @@ const ProjectDocPage = () => {
                   )}
                 </div>
               ))}
-
-              {topics.length === 0 && !addTopicOpen && (
-                <div className="text-center py-12 px-4 border-2 border-dashed border-border rounded-2xl mt-4">
-                  <BookOpen className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
-                    Sem documentação
-                  </p>
-                  <button
-                    onClick={() => setAddTopicOpen(true)}
-                    className="text-xs text-primary font-semibold mt-3 hover:underline"
-                  >
-                    Criar primeiro tópico
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </aside>
@@ -611,11 +595,11 @@ const ProjectDocPage = () => {
         </AnimatePresence>
 
         {/* Main Content Area */}
-        <main className="flex-1 flex flex-col bg-background/40 overflow-hidden relative">
+        <main className="flex-1 flex flex-col bg-background/40 overflow-hidden relative min-h-0">
           {selectedContent ? (
             <>
               {/* Editor Toolbar & Tabs */}
-              <div className="bg-card border-b border-border p-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sticky top-0 z-20">
+              <div className="shrink-0 bg-background/80 backdrop-blur-xl border-b border-border p-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 z-30">
                 <div className="flex items-center gap-1 bg-secondary/30 p-1 rounded-xl">
                    <button
                     onClick={() => setActiveTab("edit")}
@@ -638,40 +622,47 @@ const ProjectDocPage = () => {
                 </div>
 
                 {activeTab === "edit" && (
-                  <div className="flex flex-wrap items-center gap-1">
-                    {toolbarButtons.map((btn, i) => (
-                      <button
-                        key={i}
-                        onClick={btn.action}
-                        className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
-                        title={btn.label}
-                      >
-                        {btn.icon}
-                      </button>
-                    ))}
+                  <div className="flex flex-wrap items-center gap-1.5 p-1 bg-secondary/10 rounded-xl">
+                    <div className="flex items-center gap-0.5 pr-1.5 border-r border-border/50">
+                      {toolbarButtons.slice(0, 5).map((btn, i) => (
+                        <button key={i} onClick={btn.action} className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground" title={btn.label}>{btn.icon}</button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-0.5 pr-1.5 border-r border-border/50">
+                      {toolbarButtons.slice(5, 11).map((btn, i) => (
+                        <button key={i} onClick={btn.action} className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground" title={btn.label}>{btn.icon}</button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      {toolbarButtons.slice(11).map((btn, i) => (
+                        <button key={i} onClick={btn.action} className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground" title={btn.label}>{btn.icon}</button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Edit / Preview Container */}
-              <div className="flex-1 overflow-y-auto p-4 md:p-8">
-                <div className="max-w-4xl mx-auto h-full flex flex-col">
+              {/* Scrollable Container */}
+              <div data-lenis-prevent className="flex-1 overflow-y-auto min-h-0 p-4 md:p-8">
+                <div className="max-w-4xl mx-auto min-h-full flex flex-col">
                    <input
                     type="text"
+                    data-lenis-prevent
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full text-3xl font-black bg-transparent border-none outline-none placeholder:text-muted-foreground/30 mb-8"
+                    className="w-full text-3xl font-black bg-transparent border-none outline-none placeholder:text-muted-foreground/30 mb-8 shrink-0"
                     placeholder="Sem título"
                   />
 
                   {activeTab === "edit" ? (
-                    <div className="flex-1 flex flex-col">
+                    <div className="flex-1 flex flex-col min-h-[500px]">
                       <textarea
                         ref={textareaRef}
+                        data-lenis-prevent
                         value={editBody}
                         onChange={(e) => setEditBody(e.target.value)}
                         placeholder="Comece a documentar... markdown e blocos de aviso (:::info) suportados."
-                        className="flex-1 w-full bg-transparent border-none outline-none text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/20 font-mono resize-none min-h-[500px]"
+                        className="flex-1 w-full bg-transparent border-none outline-none text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/20 font-mono resize-none"
                       />
                     </div>
                   ) : (
@@ -679,12 +670,14 @@ const ProjectDocPage = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="flex-1 prose prose-sm md:prose-base dark:prose-invert max-w-none 
-                        prose-h1:text-4xl prose-h1:font-black prose-h1:mb-6 prose-h1:tracking-tight
-                        prose-h2:text-3xl prose-h2:font-extrabold prose-h2:mt-8 prose-h2:mb-4
-                        prose-h3:text-2xl prose-h3:font-bold prose-h3:mt-6 prose-h3:mb-3
-                        prose-h4:text-xl prose-h4:font-bold prose-h4:mt-4 prose-h4:mb-2
-                        prose-h5:text-lg prose-h5:font-semibold prose-h5:mt-4 prose-h5:mb-2
-                        prose-p:leading-relaxed prose-img:rounded-2xl prose-pre:bg-transparent prose-pre:p-0"
+                        prose-headings:text-foreground prose-headings:tracking-tight
+                        prose-h1:text-[2.75rem] prose-h1:font-black prose-h1:mb-8 prose-h1:leading-tight
+                        prose-h2:text-[2.1rem] prose-h2:font-extrabold prose-h2:mt-10 prose-h2:mb-5 prose-h2:leading-snug
+                        prose-h3:text-[1.65rem] prose-h3:font-bold prose-h3:mt-8 prose-h3:mb-4
+                        prose-h4:text-[1.35rem] prose-h4:font-bold prose-h4:mt-6 prose-h4:mb-3
+                        prose-h5:text-[1.15rem] prose-h5:font-semibold prose-h5:mt-4 prose-h5:mb-2
+                        prose-p:text-[1.05rem] prose-p:leading-relaxed prose-p:text-muted-foreground/90
+                        prose-img:rounded-3xl prose-img:shadow-2xl prose-pre:bg-transparent prose-pre:p-0"
                     >
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}

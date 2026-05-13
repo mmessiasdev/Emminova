@@ -1,5 +1,5 @@
 export const branding = {
-  name: "EmmiPlay",
+  name: "Emminova",
   defaultTheme: "light",
   moleculesColor: "#00BDB6",
   logo: import.meta.env.VITE_PROJECT_LOGO_URL || "https://EmmiPlay.com.br/logo.png", // Fallback if env is missing
