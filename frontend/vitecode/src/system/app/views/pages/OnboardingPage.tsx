@@ -80,7 +80,7 @@ const OnboardingPage = () => {
   const currentIdx = steps.findIndex((s) => s.key === step);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+    <div data-lenis-prevent className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
       <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="w-full max-w-lg relative z-10">

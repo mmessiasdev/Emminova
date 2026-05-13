@@ -63,7 +63,7 @@ const DashboardPage = () => {
 
   if (!enterprise) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div data-lenis-prevent className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
         <div className="text-center">
           <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Nenhuma empresa configurada</h2>
@@ -79,7 +79,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div data-lenis-prevent className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">

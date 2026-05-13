@@ -1,8 +1,3 @@
-/**
- * VIEW — Project Documentation Page: manages topics → subtopics → contents.
- * Sidebar navigation with a rich Markdown editor supporting file uploads and YouTube.
- */
-
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@app/controllers/AuthController";
@@ -13,19 +8,16 @@ import {
 import { cn, extractYouTubeId } from "@app/lib/utils";
 import { branding } from "@/values/config/branding";
 import {
-  ArrowLeft, Plus, Loader2, ChevronDown, ChevronRight,
-  FileText, FolderOpen, Trash2, Pencil, Save, X, BookOpen,
-  Bold, Italic, List, ListOrdered, Code, Image as ImageIcon,
-  Link as LinkIcon, Quote, AlertCircle, Heading1, Heading2,
-  Heading3, Heading4, Heading5, Eye, Type, MessageSquare, AlertTriangle, Info,
-  Minus, CheckCircle2, Copy, Highlighter, Upload, Youtube,
-  FileUp, PlayCircle, Download
+  ArrowLeft, Loader2, Save, BookOpen, Eye, FolderOpen, FileText, Pencil,
+  Heading1, Heading2, Heading3, Heading4, Heading5, Bold, Italic, List, ListOrdered, Code,
+  Youtube, Quote, Highlighter, Type, Minus, Info, AlertTriangle, AlertCircle
 } from "lucide-react";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { motion, AnimatePresence } from "framer-motion";
+
+import { DocSidebar } from "../components/documentation/DocSidebar";
+import { DocToolbar } from "../components/documentation/DocToolbar";
+import { MarkdownRenderer } from "../components/documentation/MarkdownRenderer";
+import { SimplifiedWysiwyg } from "../components/documentation/SimplifiedWysiwyg";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 
@@ -38,32 +30,22 @@ const ProjectDocPage = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Sidebar state
+  // Navigation State
   const [expandedTopics, setExpandedTopics] = useState<Set<number>>(new Set());
   const [expandedSubtopics, setExpandedSubtopics] = useState<Set<number>>(new Set());
   const [subtopicsMap, setSubtopicsMap] = useState<Record<number, Subtopic[]>>({});
   const [contentsMap, setContentsMap] = useState<Record<number, Content[]>>({});
 
-  // Editor state
+  // Editor State
   const [selectedContent, setSelectedContent] = useState<Content | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Inline add forms
-  const [addTopicOpen, setAddTopicOpen] = useState(false);
-  const [newTopicTitle, setNewTopicTitle] = useState("");
-  const [addSubtopicFor, setAddSubtopicFor] = useState<number | null>(null);
-  const [newSubtopicTitle, setNewSubtopicTitle] = useState("");
-  const [addContentFor, setAddContentFor] = useState<number | null>(null);
-  const [newContentTitle, setNewContentTitle] = useState("");
-
-  // Sidebar mobile toggle
+  const [activeTab, setActiveTab] = useState<"edit" | "preview" | "simplified">("preview"); // Starts with preview as requested
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const projectId = Number(id);
 
   const loadProject = useCallback(async () => {
@@ -72,16 +54,10 @@ const ProjectDocPage = () => {
       setProject(p);
       const t = await topicApi.getByProject(projectId);
       setTopics(t);
-    } catch {
-      // silent
-    } finally {
-      setLoading(false);
-    }
+    } catch { /* silent */ } finally { setLoading(false); }
   }, [projectId]);
 
-  useEffect(() => {
-    loadProject();
-  }, [loadProject]);
+  useEffect(() => { loadProject(); }, [loadProject]);
 
   const loadSubtopics = async (topicId: number) => {
     if (subtopicsMap[topicId]) return;
@@ -95,50 +71,20 @@ const ProjectDocPage = () => {
     setContentsMap((prev) => ({ ...prev, [subtopicId]: cs }));
   };
 
-  const toggleTopic = (topicId: number) => {
-    setExpandedTopics((prev) => {
-      const next = new Set(prev);
-      if (next.has(topicId)) next.delete(topicId);
-      else { next.add(topicId); loadSubtopics(topicId); }
-      return next;
-    });
-  };
-
-  const toggleSubtopic = (subtopicId: number) => {
-    setExpandedSubtopics((prev) => {
-      const next = new Set(prev);
-      if (next.has(subtopicId)) next.delete(subtopicId);
-      else { next.add(subtopicId); loadContents(subtopicId); }
-      return next;
-    });
-  };
-
-  // CRUD handlers
-  const handleAddTopic = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTopicTitle.trim()) return;
-    const t = await topicApi.create({ title: newTopicTitle.trim(), project: projectId });
+  // Handlers for Sidebar
+  const handleAddTopic = async (title: string) => {
+    const t = await topicApi.create({ title, project: projectId });
     setTopics((prev) => [...prev, t]);
-    setNewTopicTitle("");
-    setAddTopicOpen(false);
   };
 
-  const handleAddSubtopic = async (e: React.FormEvent, topicId: number) => {
-    e.preventDefault();
-    if (!newSubtopicTitle.trim()) return;
-    const s = await subtopicApi.create({ title: newSubtopicTitle.trim(), topic: topicId });
+  const handleAddSubtopic = async (topicId: number, title: string) => {
+    const s = await subtopicApi.create({ title, topic: topicId });
     setSubtopicsMap((prev) => ({ ...prev, [topicId]: [...(prev[topicId] || []), s] }));
-    setNewSubtopicTitle("");
-    setAddSubtopicFor(null);
   };
 
-  const handleAddContent = async (e: React.FormEvent, subtopicId: number) => {
-    e.preventDefault();
-    if (!newContentTitle.trim()) return;
-    const c = await contentApi.create({ title: newContentTitle.trim(), body: "", subtopic: subtopicId });
+  const handleAddContent = async (subtopicId: number, title: string) => {
+    const c = await contentApi.create({ title, body: "", subtopic: subtopicId });
     setContentsMap((prev) => ({ ...prev, [subtopicId]: [...(prev[subtopicId] || []), c] }));
-    setNewContentTitle("");
-    setAddContentFor(null);
     selectContent(c);
   };
 
@@ -147,70 +93,61 @@ const ProjectDocPage = () => {
     setEditTitle(c.title);
     setEditBody(c.body || "");
     setSidebarOpen(false);
-    setActiveTab("edit");
+    setActiveTab("preview"); // Default to preview when selecting as well
   };
 
   const handleSave = async () => {
     if (!selectedContent) return;
     setSaving(true);
     try {
-      const updated = await contentApi.update(selectedContent.id, {
-        title: editTitle,
-        body: editBody,
-      });
+      const updated = await contentApi.update(selectedContent.id, { title: editTitle, body: editBody });
       setSelectedContent(updated);
-      // Update in map
-      if (selectedContent.subtopic) {
-        const subId = typeof selectedContent.subtopic === "object"
-          ? selectedContent.subtopic.id
-          : (selectedContent as any).subtopic;
-        setContentsMap((prev) => ({
-          ...prev,
-          [subId]: (prev[subId] || []).map((c) => (c.id === updated.id ? updated : c)),
-        }));
-      }
-    } catch {
-      // silent
-    } finally {
-      setSaving(false);
-    }
+      const subId = typeof updated.subtopic === "object" ? updated.subtopic.id : (updated as any).subtopic;
+      setContentsMap((prev) => ({
+        ...prev,
+        [subId]: (prev[subId] || []).map((c) => (c.id === updated.id ? updated : c)),
+      }));
+    } catch { /* silent */ } finally { setSaving(false); }
   };
 
   const handleDeleteTopic = async (topicId: number) => {
-    if (!confirm("Excluir este tópico e todos os seus subtópicos?")) return;
+    if (!confirm("Excluir este tópico?")) return;
     await topicApi.remove(topicId);
     setTopics((prev) => prev.filter((t) => t.id !== topicId));
   };
 
-  const handleDeleteSubtopic = async (subtopicId: number, topicId: number) => {
-    if (!confirm("Excluir este subtópico e todos os seus conteúdos?")) return;
-    await subtopicApi.remove(subtopicId);
-    setSubtopicsMap((prev) => ({
-      ...prev,
-      [topicId]: (prev[topicId] || []).filter((s) => s.id !== subtopicId),
-    }));
+  const handleDeleteSubtopic = async (subId: number, topicId: number) => {
+    if (!confirm("Excluir este subtópico?")) return;
+    await subtopicApi.remove(subId);
+    setSubtopicsMap((prev) => ({ ...prev, [topicId]: (prev[topicId] || []).filter((s) => s.id !== subId) }));
   };
 
   const handleDeleteContent = async (contentId: number, subtopicId: number) => {
-    if (!confirm("Excluir este conteúdo?")) return;
+    if (!confirm("Excluir conteúdo?")) return;
     await contentApi.remove(contentId);
-    setContentsMap((prev) => ({
-      ...prev,
-      [subtopicId]: (prev[subtopicId] || []).filter((c) => c.id !== contentId),
-    }));
+    setContentsMap((prev) => ({ ...prev, [subtopicId]: (prev[subtopicId] || []).filter((c) => c.id !== contentId) }));
     if (selectedContent?.id === contentId) setSelectedContent(null);
   };
 
-  // Editor Toolbar Helpers
+  // Editor Actions
   const insertText = (before: string, after: string = "", placeholder: string = "") => {
+    if (activeTab === "simplified") {
+      const textToInsert = before + placeholder + after;
+      import("marked").then(({ marked }) => {
+        let html = marked.parse(textToInsert, { async: false }) as string;
+        // Append a break so the user can type after the inserted block
+        html += "<p><br></p>";
+        document.execCommand("insertHTML", false, html);
+      });
+      return;
+    }
+
     if (!textareaRef.current) return;
     const start = textareaRef.current.selectionStart;
     const end = textareaRef.current.selectionEnd;
     const selected = editBody.substring(start, end) || placeholder;
     const newText = editBody.substring(0, start) + before + selected + after + editBody.substring(end);
     setEditBody(newText);
-
-    // Reset focus and selection
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
@@ -219,472 +156,152 @@ const ProjectDocPage = () => {
     }, 0);
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setSaving(true);
-    try {
-      const uploaded = await uploadApi.upload(file);
-      const url = uploaded.url.startsWith("http") ? uploaded.url : `${API_URL}${uploaded.url}`;
-
-      if (file.type.startsWith("image/")) {
-        insertText(`![${file.name}](${url})`, "");
-      } else if (file.type.startsWith("video/")) {
-        insertText(`\n<video controls src="${url}" class="w-full rounded-2xl my-4"></video>\n`, "");
-      } else {
-        insertText(`[📄 ${file.name}](${url})`, "");
-      }
-    } catch (err) {
-      alert("Falha ao subir arquivo.");
-    } finally {
-      setSaving(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+  const handleAction = (cmd: string, markdownBefore: string, markdownAfter = "", markdownPlaceholder = "", value?: string) => {
+    if (activeTab === "simplified") {
+      document.execCommand(cmd, false, value);
+    } else {
+      insertText(markdownBefore, markdownAfter, markdownPlaceholder);
     }
-  };
-
-  const handleYoutubeInsert = () => {
-    const url = prompt("Cole o link do vídeo do YouTube:");
-    if (!url) return;
-    const id = extractYouTubeId(url);
-    if (!id) {
-      alert("Link do YouTube inválido.");
-      return;
-    }
-    insertText(`\n<youtube id="${id}"></youtube>\n`, "");
   };
 
   const toolbarButtons = [
-    { icon: <Heading1 size={16} />, action: () => insertText("# ", ""), label: "H1" },
-    { icon: <Heading2 size={16} />, action: () => insertText("## ", ""), label: "H2" },
-    { icon: <Heading3 size={16} />, action: () => insertText("### ", ""), label: "H3" },
-    { icon: <Heading4 size={16} />, action: () => insertText("#### ", ""), label: "H4" },
-    { icon: <Heading5 size={16} />, action: () => insertText("##### ", ""), label: "H5" },
-    { icon: <Bold size={16} />, action: () => insertText("**", "**", "negrito"), label: "Negrito" },
-    { icon: <Italic size={16} />, action: () => insertText("_", "_", "itálico"), label: "Itálico" },
-    { icon: <List size={16} />, action: () => insertText("- ", ""), label: "Lista" },
-    { icon: <ListOrdered size={16} />, action: () => insertText("1. ", ""), label: "Lista Numerada" },
-    { icon: <Code size={16} />, action: () => insertText("```javascript\n", "\n```", "código aqui"), label: "Bloco de Código" },
-    { icon: <FileUp size={16} />, action: () => fileInputRef.current?.click(), label: "Subir Arquivo" },
-    { icon: <Youtube size={16} />, action: handleYoutubeInsert, label: "Vídeo YouTube" },
+    { icon: <Heading1 size={16} />, action: () => handleAction("formatBlock", "# ", "", "", "H1"), label: "H1" },
+    { icon: <Heading2 size={16} />, action: () => handleAction("formatBlock", "## ", "", "", "H2"), label: "H2" },
+    { icon: <Heading3 size={16} />, action: () => handleAction("formatBlock", "### ", "", "", "H3"), label: "H3" },
+    { icon: <Heading4 size={16} />, action: () => handleAction("formatBlock", "#### ", "", "", "H4"), label: "H4" },
+    { icon: <Heading5 size={16} />, action: () => handleAction("formatBlock", "##### ", "", "", "H5"), label: "H5" },
+    { icon: <Bold size={16} />, action: () => handleAction("bold", "**", "**", "negrito"), label: "Negrito" },
+    { icon: <Italic size={16} />, action: () => handleAction("italic", "_", "_", "itálico"), label: "Itálico" },
+    { icon: <List size={16} />, action: () => handleAction("insertUnorderedList", "- ", ""), label: "Lista" },
+    { icon: <ListOrdered size={16} />, action: () => handleAction("insertOrderedList", "1. ", ""), label: "Lista Numerada" },
+    { icon: <Code size={16} />, action: () => insertText("```\n", "\n```", "código aqui"), label: "Código" },
     { icon: <Quote size={16} />, action: () => insertText("> ", ""), label: "Citação" },
-    { icon: <Highlighter size={16} />, action: () => insertText("<mark>", "</mark>", "destaque"), label: "Grifar" },
-    { icon: <Type size={14} />, action: () => insertText("<small>", "</small>", "texto pequeno"), label: "Texto Menor" },
+    { icon: <Highlighter size={16} />, action: () => insertText("==", "==", "destaque"), label: "Destacar" },
+    { icon: <Type size={16} />, action: () => insertText("###### ", "", "Texto menor"), label: "Texto Menor" },
     { icon: <Minus size={16} />, action: () => insertText("\n---\n", ""), label: "Divisor" },
-    { icon: <Info size={16} />, action: () => insertText("\n:::info\n", "\n:::", "Informação"), label: "Aviso Info" },
-    { icon: <AlertTriangle size={16} />, action: () => insertText("\n:::warning\n", "\n:::", "Aviso"), label: "Aviso Warning" },
-    { icon: <AlertCircle size={16} />, action: () => insertText("\n:::danger\n", "\n:::", "Perigo"), label: "Aviso Danger" },
-  ];
+    { icon: <Info size={16} />, action: () => insertText("\n:::info\n", "\n:::\n", "Informação"), label: "Aviso Info" },
+    { icon: <AlertTriangle size={16} />, action: () => insertText("\n:::warning\n", "\n:::\n", "Atenção"), label: "Aviso Atenção" },
+    { icon: <AlertCircle size={16} />, action: () => insertText("\n:::danger\n", "\n:::\n", "Perigo"), label: "Aviso Perigo" },
+    { icon: <FileText size={16} />, action: () => fileInputRef.current?.click(), label: "Arquivo" },
+    { icon: <Youtube size={16} />, action: () => { const url = prompt("Link Youtube:"); if (url) insertText(`<youtube id="${extractYouTubeId(url)}"></youtube>`); }, label: "YouTube" },
+    { icon: <Save size={16} />, action: handleSave, label: "Salvar" }
+  ].map(b => ({ ...b, icon: b.icon }));
 
-  // Markdown Custom Components
-  const MarkdownComponents = {
-    code({ node, inline, className, children, ...props }: any) {
-      const match = /language-(\w+)/.exec(className || '')
-      return !inline && match ? (
-        <SyntaxHighlighter
-          style={vscDarkPlus as any}
-          language={match[1]}
-          PreTag="div"
-          className="rounded-xl my-4"
-          {...props}
-        >
-          {String(children).replace(/\n$/, '')}
-        </SyntaxHighlighter>
-      ) : (
-        <code className={cn("bg-secondary px-1.5 py-0.5 rounded-md text-primary font-mono text-[0.9em]", className)} {...props}>
-          {children}
-        </code>
-      )
-    },
-    p: ({ children }: any) => {
-      // Find ::: strings in children
-      const text = React.Children.toArray(children).join("");
-
-      if (text.startsWith(':::info')) {
-        return (
-          <div className="bg-blue-500/10 border-l-4 border-blue-500 p-4 my-4 rounded-r-xl flex gap-3">
-            <Info className="text-blue-500 shrink-0" size={20} />
-            <div className="text-sm prose-p:my-0 prose-p:leading-normal">{text.replace(/:::info|:::/g, '').trim()}</div>
-          </div>
-        );
-      }
-      if (text.startsWith(':::warning')) {
-        return (
-          <div className="bg-amber-500/10 border-l-4 border-amber-500 p-4 my-4 rounded-r-xl flex gap-3">
-            <AlertTriangle className="text-amber-500 shrink-0" size={20} />
-            <div className="text-sm prose-p:my-0 prose-p:leading-normal">{text.replace(/:::warning|:::/g, '').trim()}</div>
-          </div>
-        );
-      }
-      if (text.startsWith(':::danger')) {
-        return (
-          <div className="bg-red-500/10 border-l-4 border-red-500 p-4 my-4 rounded-r-xl flex gap-3">
-            <AlertCircle className="text-red-500 shrink-0" size={20} />
-            <div className="text-sm prose-p:my-0 prose-p:leading-normal">{text.replace(/:::danger|:::/g, '').trim()}</div>
-          </div>
-        );
-      }
-      return <p>{children}</p>;
-    },
-    // Custom tag for youtube
-    youtube: ({ id }: { id: string }) => (
-      <div className="aspect-video w-full rounded-2xl overflow-hidden my-6 border border-border shadow-2xl">
-        <iframe
-          src={`https://www.youtube.com/embed/${id}`}
-          className="w-full h-full"
-          allowFullScreen
-          title="YouTube Video"
-        />
-      </div>
-    ),
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
+  if (loading) return <div className="h-screen flex items-center justify-center"><Loader2 className="animate-spin" /></div>;
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      {/* Hidden File Input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileUpload}
-        className="hidden"
-      />
+    <div data-lenis-prevent className="h-screen bg-background flex flex-col overflow-hidden">
+      <input type="file" ref={fileInputRef} onChange={async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const uploaded = await uploadApi.upload(file);
+        const url = uploaded.url.startsWith("http") ? uploaded.url : `${API_URL}${uploaded.url}`;
+        insertText(file.type.startsWith("image/") ? `![${file.name}](${url})` : `[📄 ${file.name}](${url})`);
+      }} className="hidden" />
 
-      {/* Header */}
+      {/* Main Header */}
       <header className="h-14 shrink-0 bg-background/80 backdrop-blur-xl border-b border-border flex items-center px-4 md:px-6 gap-3 z-50">
-        <button
-          onClick={() => navigate("/app")}
-          className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </button>
+        <button onClick={() => navigate("/app")} className="p-2 rounded-lg hover:bg-secondary/50"><ArrowLeft className="w-4 h-4" /></button>
         <div className="flex items-center gap-2">
           <img src={branding.logo} alt={branding.name} className="h-6 object-contain" />
           <span className="text-muted-foreground">/</span>
           <BookOpen className="w-4 h-4 text-primary" />
-          <h1 className="text-sm font-semibold truncate max-w-[150px] md:max-w-none">
-            {project?.name || "Projeto"}
-          </h1>
+          <h1 className="text-sm font-semibold truncate">{project?.name}</h1>
         </div>
-
         <div className="ml-auto flex items-center gap-2">
-           {selectedContent && (
-             <button
-              onClick={handleSave}
-              disabled={saving}
-              className="h-9 px-4 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 transition-all shadow-glow"
-            >
+          {selectedContent && (
+            <button onClick={handleSave} disabled={saving} className="h-9 px-4 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 transition-all shadow-glow">
               {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3" /> Salvar</>}
             </button>
-           )}
-
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors"
-          >
-            <FolderOpen className="w-4 h-4" />
-          </button>
+          )}
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden p-2 rounded-lg hover:bg-secondary/50"><FolderOpen className="w-4 h-4" /></button>
         </div>
       </header>
 
       <div className="flex-1 flex overflow-hidden min-h-0">
-        {/* Sidebar */}
-        <aside
-          data-lenis-prevent
-          className={cn(
-            "w-72 border-r border-border bg-card flex-shrink-0 overflow-y-auto transition-transform duration-300 min-h-0",
-            "fixed md:relative inset-y-0 left-0 z-40 md:z-0 md:translate-x-0 pt-14 md:pt-0",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          )}
-        >
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Documentação</h2>
-              <button
-                onClick={() => setAddTopicOpen(true)}
-                className="p-1 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors"
-                title="Novo tópico"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
+        <DocSidebar
+          topics={topics}
+          expandedTopics={expandedTopics}
+          expandedSubtopics={expandedSubtopics}
+          subtopicsMap={subtopicsMap}
+          contentsMap={contentsMap}
+          selectedContent={selectedContent}
+          sidebarOpen={sidebarOpen}
+          onToggleTopic={(id) => {
+            setExpandedTopics(prev => {
+              const next = new Set(prev);
+              if (next.has(id)) next.delete(id); else { next.add(id); loadSubtopics(id); }
+              return next;
+            });
+          }}
+          onToggleSubtopic={(id) => {
+            setExpandedSubtopics(prev => {
+              const next = new Set(prev);
+              if (next.has(id)) next.delete(id); else { next.add(id); loadContents(id); }
+              return next;
+            });
+          }}
+          onSelectContent={selectContent}
+          onAddTopic={handleAddTopic}
+          onAddSubtopic={handleAddSubtopic}
+          onAddContent={handleAddContent}
+          onDeleteTopic={handleDeleteTopic}
+          onDeleteSubtopic={handleDeleteSubtopic}
+          onDeleteContent={handleDeleteContent}
+        />
 
-            {/* Add Topic Form */}
-            <AnimatePresence>
-              {addTopicOpen && (
-                <motion.form
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  onSubmit={handleAddTopic}
-                  className="mb-3 flex gap-2 overflow-hidden"
-                >
-                  <input
-                    type="text"
-                    value={newTopicTitle}
-                    onChange={(e) => setNewTopicTitle(e.target.value)}
-                    placeholder="Nome do tópico"
-                    autoFocus
-                    className="flex-1 h-8 px-2 rounded-lg bg-secondary/50 border border-border text-xs focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                  <button type="submit" className="p-1.5 rounded-lg bg-primary text-primary-foreground">
-                    <Plus className="w-3 h-3" />
-                  </button>
-                  <button type="button" onClick={() => setAddTopicOpen(false)} className="p-1.5 rounded-lg hover:bg-secondary/50">
-                    <X className="w-3 h-3" />
-                  </button>
-                </motion.form>
-              )}
-            </AnimatePresence>
-
-            {/* Topic Tree */}
-            <div className="space-y-1">
-              {topics.map((topic) => (
-                <div key={topic.id}>
-                  {/* Topic */}
-                  <div className={cn(
-                    "group flex items-center gap-1 py-1.5 px-2 rounded-lg transition-colors",
-                    expandedTopics.has(topic.id) ? "bg-secondary/30" : "hover:bg-secondary/50"
-                  )}>
-                    <button onClick={() => toggleTopic(topic.id)} className="shrink-0">
-                      {expandedTopics.has(topic.id)
-                        ? <ChevronDown className="w-3 h-3 text-muted-foreground" />
-                        : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
-                    </button>
-                    <button onClick={() => toggleTopic(topic.id)} className="flex-1 text-left text-sm font-medium truncate">
-                      {topic.title}
-                    </button>
-                    <div className="hidden group-hover:flex items-center gap-0.5">
-                      <button
-                        onClick={() => { setAddSubtopicFor(topic.id); setExpandedTopics((p) => new Set(p).add(topic.id)); loadSubtopics(topic.id); }}
-                        className="p-1 rounded hover:bg-secondary text-muted-foreground" title="Adicionar subtópico"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteTopic(topic.id)}
-                        className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Excluir"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Subtopics */}
-                  {expandedTopics.has(topic.id) && (
-                    <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="ml-4 border-l border-border pl-2 space-y-0.5 mt-1"
-                    >
-                      {/* Add Subtopic Form */}
-                      {addSubtopicFor === topic.id && (
-                        <form onSubmit={(e) => handleAddSubtopic(e, topic.id)} className="flex gap-1 py-1">
-                          <input
-                            type="text"
-                            value={newSubtopicTitle}
-                            onChange={(e) => setNewSubtopicTitle(e.target.value)}
-                            placeholder="Subtópico"
-                            autoFocus
-                            className="flex-1 h-7 px-2 rounded-md bg-secondary/50 border border-border text-xs focus:outline-none focus:ring-1 focus:ring-primary/50"
-                          />
-                          <button type="submit" className="p-1 rounded bg-primary text-primary-foreground"><Plus className="w-3 h-3" /></button>
-                          <button type="button" onClick={() => setAddSubtopicFor(null)} className="p-1 rounded hover:bg-secondary/50"><X className="w-3 h-3" /></button>
-                        </form>
-                      )}
-
-                      {(subtopicsMap[topic.id] || []).map((sub) => (
-                        <div key={sub.id}>
-                          <div className={cn(
-                            "group flex items-center gap-1 py-1 px-2 rounded-md transition-colors",
-                            expandedSubtopics.has(sub.id) ? "bg-secondary/20" : "hover:bg-secondary/50"
-                          )}>
-                            <button onClick={() => toggleSubtopic(sub.id)} className="shrink-0">
-                              {expandedSubtopics.has(sub.id)
-                                ? <ChevronDown className="w-3 h-3 text-muted-foreground" />
-                                : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
-                            </button>
-                            <button onClick={() => toggleSubtopic(sub.id)} className="flex-1 text-left text-xs text-muted-foreground hover:text-foreground truncate">
-                              {sub.title}
-                            </button>
-                            <div className="hidden group-hover:flex items-center gap-0.5">
-                              <button
-                                onClick={() => { setAddContentFor(sub.id); setExpandedSubtopics((p) => new Set(p).add(sub.id)); loadContents(sub.id); }}
-                                className="p-0.5 rounded hover:bg-secondary text-muted-foreground" title="Novo conteúdo"
-                              >
-                                <Plus className="w-3 h-3" />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteSubtopic(sub.id, topic.id)}
-                                className="p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Excluir"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Contents */}
-                          {expandedSubtopics.has(sub.id) && (
-                            <div className="ml-4 border-l border-border/50 pl-2 space-y-0.5 mt-0.5">
-                              {addContentFor === sub.id && (
-                                <form onSubmit={(e) => handleAddContent(e, sub.id)} className="flex gap-1 py-1">
-                                  <input
-                                    type="text"
-                                    value={newContentTitle}
-                                    onChange={(e) => setNewContentTitle(e.target.value)}
-                                    placeholder="Título"
-                                    autoFocus
-                                    className="flex-1 h-6 px-2 rounded text-xs bg-secondary/50 border border-border focus:outline-none focus:ring-1 focus:ring-primary/50"
-                                  />
-                                  <button type="submit" className="p-0.5 rounded bg-primary text-primary-foreground"><Plus className="w-3 h-3" /></button>
-                                  <button type="button" onClick={() => setAddContentFor(null)} className="p-0.5 rounded hover:bg-secondary/50"><X className="w-3 h-3" /></button>
-                                </form>
-                              )}
-
-                              {(contentsMap[sub.id] || []).map((content) => (
-                                <button
-                                  key={content.id}
-                                  onClick={() => selectContent(content)}
-                                  className={cn(
-                                    "group/c w-full flex items-center gap-1.5 py-1 px-2 rounded text-xs transition-all",
-                                    selectedContent?.id === content.id
-                                      ? "bg-primary/10 text-primary font-medium border-l-2 border-primary -ml-[1px]"
-                                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                                  )}
-                                >
-                                  <FileText className="w-3 h-3 shrink-0" />
-                                  <span className="truncate flex-1 text-left">{content.title}</span>
-                                  <span
-                                    onClick={(e) => { e.stopPropagation(); handleDeleteContent(content.id, sub.id); }}
-                                    className="hidden group-hover/c:block p-0.5 rounded hover:bg-destructive/10 hover:text-destructive cursor-pointer"
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </span>
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </aside>
-
-        {/* Overlay for mobile sidebar */}
         <AnimatePresence>
-          {sidebarOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
-              onClick={() => setSidebarOpen(false)}
-            />
-          )}
+          {sidebarOpen && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden" onClick={() => setSidebarOpen(false)} />}
         </AnimatePresence>
 
-        {/* Main Content Area */}
         <main className="flex-1 flex flex-col bg-background/40 overflow-hidden relative min-h-0">
           {selectedContent ? (
             <>
-              {/* Editor Toolbar & Tabs */}
-              <div className="shrink-0 bg-background/80 backdrop-blur-xl border-b border-border p-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 z-30">
-                <div className="flex items-center gap-1 bg-secondary/30 p-1 rounded-xl">
-                   <button
-                    onClick={() => setActiveTab("edit")}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                      activeTab === "edit" ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    <Pencil size={14} /> Editor
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("preview")}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                      activeTab === "preview" ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    <Eye size={14} /> Visualizar
-                  </button>
-                </div>
+              <DocToolbar
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                buttons={toolbarButtons as any}
+              />
 
-                {activeTab === "edit" && (
-                  <div className="flex flex-wrap items-center gap-1.5 p-1 bg-secondary/10 rounded-xl">
-                    <div className="flex items-center gap-0.5 pr-1.5 border-r border-border/50">
-                      {toolbarButtons.slice(0, 5).map((btn, i) => (
-                        <button key={i} onClick={btn.action} className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground" title={btn.label}>{btn.icon}</button>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-0.5 pr-1.5 border-r border-border/50">
-                      {toolbarButtons.slice(5, 11).map((btn, i) => (
-                        <button key={i} onClick={btn.action} className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground" title={btn.label}>{btn.icon}</button>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-0.5">
-                      {toolbarButtons.slice(11).map((btn, i) => (
-                        <button key={i} onClick={btn.action} className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground" title={btn.label}>{btn.icon}</button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Scrollable Container */}
               <div data-lenis-prevent className="flex-1 overflow-y-auto min-h-0 p-4 md:p-8">
                 <div className="max-w-4xl mx-auto min-h-full flex flex-col">
-                   <input
+                  <input
                     type="text"
-                    data-lenis-prevent
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
                     className="w-full text-3xl font-black bg-transparent border-none outline-none placeholder:text-muted-foreground/30 mb-8 shrink-0"
                     placeholder="Sem título"
                   />
 
-                  {activeTab === "edit" ? (
+                  {activeTab === "preview" && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex-1">
+                      <MarkdownRenderer content={editBody} />
+                    </motion.div>
+                  )}
+
+                  {activeTab === "edit" && (
                     <div className="flex-1 flex flex-col min-h-[500px]">
                       <textarea
                         ref={textareaRef}
                         data-lenis-prevent
                         value={editBody}
                         onChange={(e) => setEditBody(e.target.value)}
-                        placeholder="Comece a documentar... markdown e blocos de aviso (:::info) suportados."
-                        className="flex-1 w-full bg-transparent border-none outline-none text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/20 font-mono resize-none"
+                        placeholder="Edite o markdown..."
+                        className="flex-1 w-full bg-transparent border-none outline-none text-sm leading-relaxed font-mono resize-none"
                       />
                     </div>
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex-1 prose prose-sm md:prose-base dark:prose-invert max-w-none 
-                        prose-headings:text-foreground prose-headings:tracking-tight
-                        prose-h1:text-[2.75rem] prose-h1:font-black prose-h1:mb-8 prose-h1:leading-tight
-                        prose-h2:text-[2.1rem] prose-h2:font-extrabold prose-h2:mt-10 prose-h2:mb-5 prose-h2:leading-snug
-                        prose-h3:text-[1.65rem] prose-h3:font-bold prose-h3:mt-8 prose-h3:mb-4
-                        prose-h4:text-[1.35rem] prose-h4:font-bold prose-h4:mt-6 prose-h4:mb-3
-                        prose-h5:text-[1.15rem] prose-h5:font-semibold prose-h5:mt-4 prose-h5:mb-2
-                        prose-p:text-[1.05rem] prose-p:leading-relaxed prose-p:text-muted-foreground/90
-                        prose-img:rounded-3xl prose-img:shadow-2xl prose-pre:bg-transparent prose-pre:p-0"
-                    >
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={MarkdownComponents as any}
-                      >
-                        {editBody || "*Conteúdo vazio.*"}
-                      </ReactMarkdown>
+                  )}
+
+                  {activeTab === "simplified" && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col">
+                      <div className="flex items-center gap-2 mb-6 py-2 px-4 bg-primary/10 border border-primary/20 rounded-2xl text-[11px] text-primary font-medium w-fit shadow-glow">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                        Editor Inteligente: O que você vê é o que você tem (WYSIWYG)
+                      </div>
+                      <SimplifiedWysiwyg
+                        markdown={editBody}
+                        onChange={setEditBody}
+                      />
                     </motion.div>
                   )}
                 </div>
@@ -692,34 +309,19 @@ const ProjectDocPage = () => {
 
               {/* Floating Save Hint */}
               <AnimatePresence>
-                {!saving && selectedContent.body !== editBody && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    className="fixed bottom-6 right-6 hidden md:flex items-center gap-3 bg-card border border-border p-3 rounded-2xl shadow-2xl z-50"
-                  >
+                {selectedContent.body !== editBody && !saving && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="fixed bottom-6 right-6 hidden md:flex items-center gap-3 bg-card border border-border p-3 rounded-2xl shadow-2xl z-50">
                     <span className="text-xs text-muted-foreground">Alterações não salvas</span>
-                    <button
-                      onClick={handleSave}
-                      className="h-9 px-4 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:scale-105 active:scale-95 transition-all shadow-glow"
-                    >
-                      Salvar agora
-                    </button>
+                    <button onClick={handleSave} className="h-9 px-4 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:scale-105 active:scale-95 transition-all shadow-glow">Salvar agora</button>
                   </motion.div>
                 )}
               </AnimatePresence>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full min-h-[60vh] p-8 text-center">
-              <div className="w-24 h-24 rounded-full bg-primary/5 flex items-center justify-center mb-6 relative">
-                <div className="absolute inset-0 bg-primary/10 rounded-full animate-ping" />
-                <FileText className="w-10 h-10 text-primary/40 relative z-10" />
-              </div>
+            <div className="flex flex-col items-center justify-center h-full text-center p-8">
+              <FileText className="w-10 h-10 text-primary/20 mb-4" />
               <h3 className="text-xl font-bold">Nenhum conteúdo selecionado</h3>
-              <p className="text-sm text-muted-foreground max-w-xs mt-2">
-                Navegue pelos tópicos na barra lateral ou crie uma nova página de documentação para começar.
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">Escolha uma página na barra lateral.</p>
             </div>
           )}
         </main>

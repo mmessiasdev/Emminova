@@ -15,7 +15,7 @@ export function initSmoothScroll() {
   });
 
   // Enable ScrollTrigger normalization to prevent jumps
-  ScrollTrigger.normalizeScroll(true);
+  // ScrollTrigger.normalizeScroll(true);
 
   // Connect Lenis scroll events to GSAP ScrollTrigger
   lenis.on("scroll", ScrollTrigger.update);
