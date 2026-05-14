@@ -61,7 +61,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       let enterprise: Enterprise | null = null;
       if (profile && profile.enterprise) {
-        enterprise = profile.enterprise;
+        // Fetch the full enterprise to ensure nested relations like logo are populated
+        enterprise = await enterpriseApi.getOne(profile.enterprise.id);
       } else if (profile) {
         const enterprises = await enterpriseApi.getByProfile(profile.id);
         enterprise = enterprises.length > 0 ? enterprises[0] : null;
@@ -108,8 +109,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshEnterprise = async () => {
     if (!state.profile) return;
-    let enterprise = state.profile.enterprise || null;
-    if (!enterprise) {
+    let enterprise: Enterprise | null = null;
+    if (state.profile.enterprise) {
+      enterprise = await enterpriseApi.getOne(state.profile.enterprise.id);
+    } else {
       const enterprises = await enterpriseApi.getByProfile(state.profile.id);
       enterprise = enterprises.length > 0 ? enterprises[0] : null;
     }
