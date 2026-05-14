@@ -11,6 +11,7 @@ import PricingPage from '@landing/pages/PricingPage';
 import ContactPage from '@landing/pages/ContactPage';
 import DemoContactPage from '@landing/pages/DemoContactPage';
 import PublicHelpCenter from '@landing/pages/PublicHelpCenter';
+import PublicProjectPage from '@app/views/pages/PublicProjectPage';
 
 // App Module (lazy loaded, fully decoupled)
 import { AuthProvider } from '@app/controllers/AuthController';
@@ -19,6 +20,8 @@ const LoginPage = lazy(() => import('@app/views/pages/LoginPage'));
 const OnboardingPage = lazy(() => import('@app/views/pages/OnboardingPage'));
 const DashboardPage = lazy(() => import('@app/views/pages/DashboardPage'));
 const ProjectDocPage = lazy(() => import('@app/views/pages/ProjectDocPage'));
+const EnterpriseSettingsPage = lazy(() => import('@app/views/pages/EnterpriseSettingsPage'));
+const TeamPage = lazy(() => import('@app/views/pages/TeamPage'));
 
 
 const queryClient = new QueryClient();
@@ -130,6 +133,7 @@ function App() {
             <Route path="/contato" element={<Navigate to="/contact" replace />} />
             <Route path="/contato/demo" element={<Navigate to="/contact/demo" replace />} />
             <Route path="/help" element={<PublicHelpCenter />} />
+            <Route path="/docs/:id" element={<PublicProjectPage />} />
 
             {/* Auth Routes (redirect if already logged in) */}
             <Route element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background">Carregando...</div>}><RedirectIfAuth /></Suspense>}>
@@ -141,6 +145,8 @@ function App() {
             <Route element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background">Carregando...</div>}><RequireAuth /></Suspense>}>
               <Route path="/app" element={<Suspense fallback={null}><DashboardPage /></Suspense>} />
               <Route path="/app/onboarding" element={<Suspense fallback={null}><OnboardingPage /></Suspense>} />
+              <Route path="/app/settings" element={<Suspense fallback={null}><EnterpriseSettingsPage /></Suspense>} />
+              <Route path="/app/team" element={<Suspense fallback={null}><TeamPage /></Suspense>} />
               <Route path="/app/project/:id" element={<Suspense fallback={null}><ProjectDocPage /></Suspense>} />
             </Route>
 

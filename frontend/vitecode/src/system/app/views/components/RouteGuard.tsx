@@ -1,6 +1,6 @@
 /**
- * Route guard: redirects unauthenticated users to login
- * and users without profile/enterprise to onboarding.
+ * Route guard: redirects unauthenticated users to login.
+ * The dashboard itself handles the "no enterprise" empty state.
  */
 
 import React from "react";
@@ -9,7 +9,7 @@ import { useAuth } from "@app/controllers/AuthController";
 import { Loader2 } from "lucide-react";
 
 export const RequireAuth = () => {
-  const { jwt, loading, profile, enterprise } = useAuth();
+  const { jwt, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -22,11 +22,6 @@ export const RequireAuth = () => {
 
   if (!jwt) {
     return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  // If no profile/enterprise yet and not already on onboarding
-  if ((!profile || !enterprise) && location.pathname !== "/app/onboarding") {
-    return <Navigate to="/app/onboarding" replace />;
   }
 
   return <Outlet />;

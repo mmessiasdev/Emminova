@@ -74,12 +74,17 @@ const LoginPage = () => {
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Brand */}
-        <div className="text-center mb-8">
-          <img src={branding.logo} alt={branding.name} className="h-10 mx-auto mb-3 object-contain" />
-          <h1 className="text-3xl font-bold tracking-tight">{branding.name}</h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Documentação & Gestão de Projetos
-          </p>
+        <div className="flex items-center justify-center mt-5 p-8">
+          <img src={branding.logo} alt={branding.name} className="h-20 mx-auto mb-3 object-contain rounded-lg" />
+
+          <div >
+            <h1 className="text-3xl font-bold tracking-tight">{branding.name}</h1>
+            <p className="text-muted-foreground text-sm">
+              Documentação & Gestão de Projetos
+            </p>
+
+          </div>
+
         </div>
 
         {/* Card */}

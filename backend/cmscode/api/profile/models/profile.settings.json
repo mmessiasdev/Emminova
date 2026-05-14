@@ -41,6 +41,15 @@
     "enterprise": {
       "model": "enterprise",
       "via": "profile"
+    },
+    "permission": {
+      "type": "enumeration",
+      "enum": [
+        "owner",
+        "admin",
+        "collaborator"
+      ],
+      "default": "collaborator"
     }
   }
 }

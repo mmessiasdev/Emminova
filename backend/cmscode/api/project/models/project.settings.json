@@ -23,6 +23,10 @@
     "topics": {
       "collection": "topic",
       "via": "project"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

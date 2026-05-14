@@ -60,7 +60,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const profile = profiles.length > 0 ? profiles[0] : null;
 
       let enterprise: Enterprise | null = null;
-      if (profile) {
+      if (profile && profile.enterprise) {
+        enterprise = profile.enterprise;
+      } else if (profile) {
         const enterprises = await enterpriseApi.getByProfile(profile.id);
         enterprise = enterprises.length > 0 ? enterprises[0] : null;
       }
@@ -106,8 +108,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshEnterprise = async () => {
     if (!state.profile) return;
-    const enterprises = await enterpriseApi.getByProfile(state.profile.id);
-    const enterprise = enterprises.length > 0 ? enterprises[0] : null;
+    let enterprise = state.profile.enterprise || null;
+    if (!enterprise) {
+      const enterprises = await enterpriseApi.getByProfile(state.profile.id);
+      enterprise = enterprises.length > 0 ? enterprises[0] : null;
+    }
     setState((s) => ({ ...s, enterprise }));
   };
 

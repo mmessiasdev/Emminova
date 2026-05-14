@@ -9,11 +9,14 @@ import { projectApi, type Project } from "@app/models/api";
 import { cn } from "@app/lib/utils";
 import { branding } from "@/values/config/branding";
 import {
-  Plus, FolderKanban, LogOut, Loader2, Search, Building2, ChevronRight
+  Plus, FolderKanban, Loader2, Search, Building2, ChevronRight
 } from "lucide-react";
+import { AppHeader } from "@app/views/components/AppHeader";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 
 const DashboardPage = () => {
-  const { user, profile, enterprise, logout } = useAuth();
+  const { enterprise } = useAuth();
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState<Project[]>([]);
@@ -80,26 +83,7 @@ const DashboardPage = () => {
 
   return (
     <div data-lenis-prevent className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={branding.logo} alt={branding.name} className="h-7 object-contain" />
-            <div className="border-l border-border pl-3">
-              <h1 className="text-sm font-semibold leading-none">{enterprise.name}</h1>
-              <p className="text-xs text-muted-foreground">{profile?.fullname}</p>
-            </div>
-          </div>
-
-          <button
-            onClick={logout}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Sair</span>
-          </button>
-        </div>
-      </header>
+      <AppHeader showEnterpriseInfo showDefaultActions />
 
       {/* Content */}
       <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">

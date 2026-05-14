@@ -57,18 +57,22 @@ export interface Profile {
   id: number;
   email: string;
   fullname: string;
+  permission?: string;
+  father?: Profile | number | null;
   enterprise?: Enterprise | null;
 }
 
 export interface Enterprise {
   id: number;
   name: string;
+  logo?: { url: string } | null;
   projects?: Project[];
 }
 
 export interface Project {
   id: number;
   name: string;
+  is_public?: boolean;
   enterprise?: Enterprise;
   topics?: Topic[];
 }
@@ -117,11 +121,22 @@ export const authApi = {
 // ─── Profile ───────────────────────────────────────────────
 
 export const profileApi = {
-  getByUser(userId: number) {
-    return request<Profile[]>(`/profiles?user=${userId}`);
+  getAll() {
+    return request<Profile[]>(`/profiles`);
   },
 
-  create(data: { fullname: string; email: string; user: number }) {
+  getByUser(userId: number) {
+    return request<Profile[]>(`/profiles/me`).then(res => [res as unknown as Profile]).catch(() => []);
+  },
+
+  create(data: { fullname: string; email: string; user: number; father?: number }) {
+    return request<Profile>("/profile/me", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  createDependent(data: { fullname: string; email: string; permission: string; password?: string }) {
     return request<Profile>("/profile", {
       method: "POST",
       body: JSON.stringify(data),
@@ -132,6 +147,12 @@ export const profileApi = {
     return request<Profile>(`/profiles/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
+    });
+  },
+
+  delete(id: number) {
+    return request<Profile>(`/profiles/${id}`, {
+      method: "DELETE",
     });
   },
 };

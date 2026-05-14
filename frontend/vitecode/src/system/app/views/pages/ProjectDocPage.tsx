@@ -10,9 +10,11 @@ import { branding } from "@/values/config/branding";
 import {
   ArrowLeft, Loader2, Save, BookOpen, Eye, FolderOpen, FileText, Pencil,
   Heading1, Heading2, Heading3, Heading4, Heading5, Bold, Italic, List, ListOrdered, Code,
-  Youtube, Quote, Highlighter, Type, Minus, Info, AlertTriangle, AlertCircle
+  Youtube, Quote, Highlighter, Type, Minus, Info, AlertTriangle, AlertCircle, Sun, Moon, Globe, Copy, CheckCircle2, Trash2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
+import { AppHeader } from "@app/views/components/AppHeader";
 
 import { DocSidebar } from "../components/documentation/DocSidebar";
 import { DocToolbar } from "../components/documentation/DocToolbar";
@@ -25,6 +27,7 @@ const ProjectDocPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { enterprise } = useAuth();
+  const { theme, setTheme } = useTheme();
 
   const [project, setProject] = useState<Project | null>(null);
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -58,6 +61,40 @@ const ProjectDocPage = () => {
   }, [projectId]);
 
   useEffect(() => { loadProject(); }, [loadProject]);
+
+  const [copiedLink, setCopiedLink] = useState(false);
+  const publicLink = `${window.location.origin}/docs/${project?.id}`;
+
+  const togglePublic = async () => {
+    if (!project) return;
+    try {
+      const updated = await projectApi.update(project.id, { is_public: !project.is_public });
+      setProject(updated);
+    } catch (err: any) {
+      alert("Erro ao alterar visibilidade: " + err.message);
+    }
+  };
+
+  const copyPublicLink = () => {
+    navigator.clipboard.writeText(publicLink);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const [deletingProject, setDeletingProject] = useState(false);
+  const handleDeleteProject = async () => {
+    if (!project) return;
+    if (!window.confirm("Tem certeza que deseja excluir este projeto inteiro? Esta ação apagará permanentemente todos os tópicos, subtópicos, conteúdos e imagens atreladas a este projeto. NÃO há como desfazer.")) return;
+    
+    try {
+      setDeletingProject(true);
+      await projectApi.remove(project.id);
+      navigate("/app");
+    } catch (err: any) {
+      alert("Erro ao excluir projeto: " + err.message);
+      setDeletingProject(false);
+    }
+  };
 
   const loadSubtopics = async (topicId: number) => {
     if (subtopicsMap[topicId]) return;
@@ -200,23 +237,60 @@ const ProjectDocPage = () => {
       }} className="hidden" />
 
       {/* Main Header */}
-      <header className="h-14 shrink-0 bg-background/80 backdrop-blur-xl border-b border-border flex items-center px-4 md:px-6 gap-3 z-50">
-        <button onClick={() => navigate("/app")} className="p-2 rounded-lg hover:bg-secondary/50"><ArrowLeft className="w-4 h-4" /></button>
-        <div className="flex items-center gap-2">
-          <img src={branding.logo} alt={branding.name} className="h-6 object-contain" />
-          <span className="text-muted-foreground">/</span>
-          <BookOpen className="w-4 h-4 text-primary" />
-          <h1 className="text-sm font-semibold truncate">{project?.name}</h1>
-        </div>
-        <div className="ml-auto flex items-center gap-2">
-          {selectedContent && (
-            <button onClick={handleSave} disabled={saving} className="h-9 px-4 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 transition-all shadow-glow">
-              {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3" /> Salvar</>}
-            </button>
-          )}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden p-2 rounded-lg hover:bg-secondary/50"><FolderOpen className="w-4 h-4" /></button>
-        </div>
-      </header>
+      <AppHeader 
+        showBack
+        title={project?.name}
+        icon={BookOpen}
+        fullWidth
+        compact
+        rightActions={
+          <>
+            <div className="hidden sm:flex items-center gap-2 mr-2">
+              <button
+                onClick={handleDeleteProject}
+                disabled={deletingProject}
+                className="flex items-center gap-1.5 h-8 px-2.5 rounded-md text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors mr-1"
+                title="Excluir Projeto Permanentemente"
+              >
+                {deletingProject ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+              </button>
+
+              <button
+                onClick={togglePublic}
+                className={`flex items-center gap-1.5 h-8 px-2.5 rounded-md text-xs font-medium transition-colors border ${
+                  project?.is_public 
+                    ? "bg-green-500/10 text-green-600 border-green-500/20 hover:bg-green-500/20" 
+                    : "bg-secondary text-muted-foreground border-border hover:bg-secondary/80"
+                }`}
+                title={project?.is_public ? "Projeto Público" : "Projeto Privado"}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {project?.is_public ? "Público" : "Privado"}
+              </button>
+              
+              {project?.is_public && (
+                <button
+                  onClick={copyPublicLink}
+                  className="flex items-center gap-1.5 h-8 px-2.5 rounded-md text-xs font-medium bg-secondary text-foreground border border-border hover:bg-secondary/80 transition-colors"
+                  title="Copiar Link Público"
+                >
+                  {copiedLink ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span className="hidden md:inline">{copiedLink ? "Copiado" : "Link"}</span>
+                </button>
+              )}
+            </div>
+            
+            <div className="w-px h-5 bg-border mx-1"></div>
+
+            {selectedContent && (
+              <button onClick={handleSave} disabled={saving} className="h-8 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 transition-all shadow-glow">
+                {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3" /> Salvar</>}
+              </button>
+            )}
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden p-2 rounded-lg hover:bg-secondary/50"><FolderOpen className="w-4 h-4" /></button>
+          </>
+        }
+      />
 
       <div className="flex-1 flex overflow-hidden min-h-0">
         <DocSidebar

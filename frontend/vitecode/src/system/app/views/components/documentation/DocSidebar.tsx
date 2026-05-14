@@ -122,7 +122,7 @@ export const DocSidebar: React.FC<DocSidebarProps> = ({
                   {topic.title}
                 </button>
                 <div className="hidden group-hover:flex items-center gap-0.5">
-                  <button onClick={() => { setAddSubtopicFor(topic.id); onToggleTopic(topic.id); }} className="p-1 rounded hover:bg-secondary text-muted-foreground"><Plus className="w-3 h-3" /></button>
+                  <button onClick={() => { setAddSubtopicFor(topic.id); if (!expandedTopics.has(topic.id)) onToggleTopic(topic.id); }} className="p-1 rounded hover:bg-secondary text-muted-foreground"><Plus className="w-3 h-3" /></button>
                   <button onClick={() => onDeleteTopic(topic.id)} className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive"><Trash2 className="w-3 h-3" /></button>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export const DocSidebar: React.FC<DocSidebarProps> = ({
                         </button>
                         <button onClick={() => onToggleSubtopic(sub.id)} className="flex-1 text-left text-xs text-muted-foreground hover:text-foreground truncate">{sub.title}</button>
                         <div className="hidden group-hover:flex items-center gap-0.5">
-                          <button onClick={() => { setAddContentFor(sub.id); onToggleSubtopic(sub.id); }} className="p-0.5 rounded hover:bg-secondary text-muted-foreground"><Plus className="w-3 h-3" /></button>
+                          <button onClick={() => { setAddContentFor(sub.id); if (!expandedSubtopics.has(sub.id)) onToggleSubtopic(sub.id); }} className="p-0.5 rounded hover:bg-secondary text-muted-foreground"><Plus className="w-3 h-3" /></button>
                           <button onClick={() => onDeleteSubtopic(sub.id, topic.id)} className="p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive"><Trash2 className="w-3 h-3" /></button>
                         </div>
                       </div>
