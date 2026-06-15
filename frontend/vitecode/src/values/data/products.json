@@ -7,7 +7,7 @@
             "id": "Benefeer",
             "name": "Benefeer",
             "description": "O Benefeer é o app ideal para empresas que querem fidelizar clientes, fortalecer parceiros locais e criar novas fontes de valor com um ecossistema completo de serviços, cursos e vagas de emprego.",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607957585-d743e82b-1c07-43a2-a253-69a0f6fd7c56.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T135347Z&X-Amz-Expires=300&X-Amz-Signature=aba9fa74d068c8817e9c4961caf3ab523e11b8132914094401d2bc362ffd51c5&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng",
+            "logo": "/images/benefeer.png",
             "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2670&auto=format&fit=crop",
             "tags": [
                 "SVA",
@@ -22,7 +22,7 @@
             "name": "Emmiplace",
             "description": "Plataforma completa para gestão do espaço da sua empresa de e-commerce, marketplace ou local.",
             "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2670&auto=format&fit=crop",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607960261-5f621796-79dd-4ff5-abc3-7f53e73190ae.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T135739Z&X-Amz-Expires=300&X-Amz-Signature=213e3ab23650b39f73de3f25803fffd2b603277bb575ee5486678f03e94b032d&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng",
+            "logo": "/images/emmiplace.png",
             "link": "https://emmiplace.emminova.com",
             "tags": [
                 "E-commerce",
@@ -36,7 +36,7 @@
             "id": "Emmidoctor",
             "name": "Emmidoctor",
             "description": "Plataforma para gerenciar informações médicas com segurança e eficiência.",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607976046-fc569eef-524d-4791-b929-2aa1823a61a0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T142717Z&X-Amz-Expires=300&X-Amz-Signature=897a66d818f6231fef531ca74cd719c31cdba34b6879aba6435bdffa825a7602&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng",
+            "logo": "/images/emmidoctor.png",
             "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format",
             "link": "https://emmidoctor.emminova.com",
             "tags": [
@@ -50,7 +50,7 @@
         {
             "id": "EmmiChat",
             "name": "EmmiChat",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607977264-10882ad7-c4da-46e3-b6fa-3fdfd233a484.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T142916Z&X-Amz-Expires=300&X-Amz-Signature=99f6a35b0a3dea0c258ac003d905a9cd4d1f00cda11463944399b6574e732f13&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng",
+            "logo": "/images/emmichat.png",
             "description": "Automatize agendamentos, estoque e fluxos de WhatsApp personalizados.",
             "image": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format",
             "tags": [
@@ -64,7 +64,7 @@
         {
             "id": "EmmiPlay",
             "name": "EmmiPlay",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607978587-dcb45d14-f9d3-42fb-8599-30079cf3e3fb.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T143121Z&X-Amz-Expires=300&X-Amz-Signature=bc026c288a45fca1625e272852ecdda0a711b29edc907d6e6ff83cd250c3bb47&X-Amz-SignedHeaders=host&response-content-type=image%2Fjpeg",
+            "logo": "/images/emmiplay.png",
             "description": "Plataforma para gerenciar telas corporativas e engajar sua equipe.",
             "image": "https://images.pexels.com/photos/13323677/pexels-photo-13323677.jpeg",
             "link": "https://emmiplay.emminova.com",
@@ -78,7 +78,7 @@
         {
             "id": "Emmilitics",
             "name": "Emmilitics",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607981245-484a5f58-4d0a-41b4-8d1b-777391d4395d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T143532Z&X-Amz-Expires=300&X-Amz-Signature=66c85820f897c12cf126c76fccc0179c12fc4d77e1590555650e11a97ed503e1&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng",
+            "logo": "/images/emmilitics.png",
             "description": "Soluções white-label com gestão centralizada e BI para decisões mais rápidas.",
             "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format",
             "link": "https://emmilitics.emminova.com",
@@ -93,7 +93,7 @@
         {
             "id": "EmmiMap",
             "name": "EmmiMap",
-            "logo": "https://github-production-user-asset-6210df.s3.amazonaws.com/78608382/607982690-991d080d-494d-41b0-ba24-12ac9c1b481d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260615T143718Z&X-Amz-Expires=300&X-Amz-Signature=d81c78bcd1d1253f7e68411a817ff084fc6a9044c85b7d787b6dec9139e2c4f0&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng",
+            "logo": "/images/emmimap.png",
             "description": "Mapeie, documente e compartilhe informações geográficas com facilidade.",
             "image": "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&auto=format",
             "link": "https://emmimap.emminova.com",
@@ -107,7 +107,7 @@
         {
             "id": "Emmidocs",
             "name": "Emmidocs",
-            "logo": "https://private-user-images.githubusercontent.com/78608382/595009516-0a1e39f2-793c-4a4c-9bfd-ecc93354d22a.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODE1MzQ3MjIsIm5iZiI6MTc4MTUzNDQyMiwicGF0aCI6Ii83ODYwODM4Mi81OTUwMDk1MTYtMGExZTM5ZjItNzkzYy00YTRjLTliZmQtZWNjOTMzNTRkMjJhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjE1VDE0NDAyMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWZmOTgwMmI1NmNiOWVkNjllYTE3YjRhYWIxN2NjMDJlZmQwZDdjZGE0YzNlYzU3OWNjOWRkNGEyNjE4NGU4NTMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.MLaHSZmHUe5XG1q9986oiGxRTwYi6eoAPGfo_4NU1V4",
+            "logo": "/images/emmidocs.png",
             "description": "Organize, edite e compartilhe a base de conhecimento da sua empresa.",
             "image": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=2670&auto=format&fit=crop",
             "link": "https://emmidocs.emminova.com",
