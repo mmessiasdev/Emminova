@@ -14,6 +14,7 @@ type Project = {
     image: string;
     link: string;
     tags: string[];
+    logo?: string;
     gallery?: MediaItem[];
     documentationUrl?: string;
 };
@@ -137,6 +138,13 @@ const ProjectPopup = ({ project, onClose }: { project: Project; onClose: () => v
                         ))}
                     </div>
 
+                    {project.logo && (
+                        <img
+                            src={project.logo}
+                            alt={`${project.name} logo`}
+                            className="self-start h-16 w-16 object-cover rounded-lg mb-4"
+                        />
+                    )}
                     <h2 className="text-3xl font-bold mb-4">{project.name}</h2>
                     <p className="text-muted-foreground leading-relaxed mb-8">
                         {project.description}
@@ -294,6 +302,13 @@ export const ProductsCarousel = () => {
 
                                     {/* Text Content */}
                                     <div className="p-6 md:p-8 flex flex-col flex-1 relative z-10 bg-card -mt-6">
+                                        {item.logo && (
+                                            <img
+                                                src={item.logo}
+                                                alt={`${item.name} logo`}
+                                                className="self-start h-12 w-12 object-cover rounded-lg mb-3"
+                                            />
+                                        )}
                                         <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
                                             {item.name}
                                         </h3>

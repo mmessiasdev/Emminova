@@ -2,27 +2,27 @@
     "label": "COMO FUNCIONA",
     "title": "4 etapas simples.",
     "highlight": "Resultado garantido.",
-    "description": "Um fluxo pensado para que sua equipe documente, organize e compartilhe conhecimento de forma eficiente — sem complicação.",
+    "description": "Um fluxo pensado para que seu negócio evolua, cresca e inove de forma eficiente — sem complicação.",
     "steps": [
         {
             "icon": "Search",
-            "title": "Descubra",
-            "description": "Identifique os documentos e processos que sua equipe precisa padronizar. Mapeie o conhecimento existente e defina prioridades."
+            "title": "1º etapa - Conhecimento do negócio",
+            "description": "Realizaremos uma reunião com os responsáveis para enterdemos a realidade do seu negócio e identificar as melhores oportunidades de melhoria e inovação com tecnologia."
         },
         {
             "icon": "LayoutGrid",
-            "title": "Estruture",
-            "description": "Organize sua base de conhecimento com pastas, tags e categorias inteligentes. Crie uma hierarquia que faz sentido para o seu time."
+            "title": "2º etapa - Estruturação",
+            "description": "Nossa equipe irá estruturar nossas soluções para a realidade do seu negócio. Definiremos os processos, integrações e automações necessárias para alcançar os resultados esperados."
         },
         {
             "icon": "Code",
-            "title": "Construa",
-            "description": "Use o editor rico do Emmidocs para criar documentos profissionais com blocos, mídia, tabelas e exportação para PDF impecável."
+            "title": "3º etapa - Construção",
+            "description": "Executaremos a construção das soluções definidas, utilizando as melhores práticas de desenvolvimento para garantir qualidade, segurança e escalabilidade."
         },
         {
             "icon": "TrendingUp",
-            "title": "Evolua",
-            "description": "Acompanhe a evolução da sua documentação, compartilhe com stakeholders e mantenha tudo sempre atualizado e acessível."
+            "title": "4º etapa - Finalização e suporte",
+            "description": "Após a reunião de entrega, nossa equipe de suporte estará disponível para garantir que tudo funcione perfeitamente e para realizar ajustes necessários para otimizar os resultados do seu negócio."
         }
     ]
 }
