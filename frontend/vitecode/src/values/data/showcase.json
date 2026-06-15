@@ -6,7 +6,7 @@
             "title": "Soluções prontas para impulsionar o seu negócio.",
             "label": "WhiteLabel & SaaS",
             "description": "Nós ja possuimos um amplo catálogo de serviços de grande exelencia e valor agregado já em atividade no mercado, testadas e validadas por nossos clientes. Esses sistemas ajudam a sua empresa a automatizar, controlar e alavancar toda sua opração por meio das nossas tecnologias.",
-            "image": "/images/whitelabel.png",
+            "image": "/images/showcase1.png",
             "imageAlt": "Dashboard Power BI integrado",
             "imagePos": "right"
         },
@@ -15,7 +15,7 @@
             "title": "Desenvolvimento de Softwares sob medida.",
             "label": "Desenvolvimento de Softwares",
             "description": "Desenvolvemos sistemas web, mobile (android e ios), com alta performance e design moderno utilizando metodologa agil, transparente e visão clara para manter o foco em entregas constantes.",
-            "image": "/images/development.png",
+            "image": "/images/showcase2.png",
             "imageAlt": "Desenvolvimento de Softwares",
             "imagePos": "left"
         },
@@ -24,7 +24,7 @@
             "title": "Automações de fluxos do seu negócio com IA",
             "label": "Automações de fluxos",
             "description": "Atraves de IA e automação, nós possuimos profissionais altamente capacitados para criar fluxos personalizados e automatizar processos repetitivos do seu negócio, fazendo você evitar erros humanos, economizar tempo, dinheiro e mão de obra",
-            "image": "/images/automation.png",
+            "image": "/images/showcase3.png",
             "imageAlt": "Automação de fluxos",
             "imagePos": "right"
         },
@@ -33,7 +33,7 @@
             "title": "Consultoria e gestão de TI",
             "label": "Consultoria & Gestão de TI",
             "description": "Temos uma equipe de especialistas em consultoria e gestão de TI, oferecemos serviços personalizados para identificar gargalos, atender e alavancar o TI da sua empresa com IA e boas práticas do mercado.",
-            "image": "/images/consultoria.png",
+            "image": "/images/showcase4.png",
             "imageAlt": "Consultoria e gestão de TI",
             "imagePos": "left"
         },
@@ -42,7 +42,7 @@
             "title": "Consultoria de ERP",
             "label": "ERP & Sistemas",
             "description": "Temos uma equipe de especialistas no ERP Protheus (TOTVS), atualmente prestando serviços para dezenas de empresas, em diversos segmentos, especializando a sua equipe para extrair o melhor do sistema para sua operação.",
-            "image": "/images/erp.png",
+            "image": "/images/showcase5.png",
             "imageAlt": "Consultoria de ERP",
             "imagePos": "right"
         }

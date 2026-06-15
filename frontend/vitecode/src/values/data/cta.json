@@ -1,11 +1,11 @@
 {
     "title": "A melhor empresa de tecnologia do mercado.",
     "cta_primary": {
-        "text": "Conheça nossos produtos",
+        "text": "Se interessou por alguma solução? Agende uma demonstração com a gente!",
         "link": "/contact/demo"
     },
     "cta_secondary": {
-        "text": "Agendar uma reunião",
+        "text": "Falar com o suporte",
         "link": "/contact"
     }
 }
