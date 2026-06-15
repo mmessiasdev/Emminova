@@ -6,13 +6,13 @@
         {
             "id": "Benefeer",
             "name": "Benefeer",
-            "description": "Plataforma de gestão de benefícios e recompensas. Otimize a satisfação dos colaboradores com soluções personalizadas e automação de processos.",
+            "description": "O Benefeer é o app ideal para empresas que querem fidelizar clientes, fortalecer parceiros locais e criar novas fontes de valor com um ecossistema completo de serviços, cursos e vagas de emprego.",
             "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2670&auto=format&fit=crop",
             "link": "https://benefeer.emminova.com",
             "tags": [
-                "Dados",
-                "Dashboard",
-                "Estratégia"
+                "SVA",
+                "Fidelização de clientes",
+                "Inovação"
             ],
             "gallery": [
                 {
@@ -29,7 +29,7 @@
         {
             "id": "emmiplace",
             "name": "Emmiplace",
-            "description": "Plataforma completa para gestão de e-commerce e marketplace. Tenha controle total das suas vendas, estoque e integrações em um só lugar. Ideal para escalar sua operação de forma robusta e segura.",
+            "description": "Plataforma completa para gestão do espaço da sua empresa de e-commerce, marketplace ou local. Tenha controle total das suas vendas, estoque e integrações em um só lugar. Ideal para escalar sua operação de forma robusta e segura.",
             "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
             "link": "https://emmiplace.emminova.com",
             "tags": [
@@ -56,7 +56,7 @@
         {
             "id": "EmmiChat",
             "name": "EmmiChat",
-            "description": "Atendimento automatizado com Inteligência Artificial avançada. Revolucione o suporte ao cliente com respostas instantâneas, fluxos personalizados e integração multicanal nativa.",
+            "description": "Automatize seus agendamentos, domine seu estoque com precisão cirúrgica e crie fluxos de WhatsApp personalizados. A solução completa para quem busca eficiência e resultados extraordinários.",
             "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2550&auto=format&fit=crop",
             "link": "https://emmichat.emminova.com",
             "tags": [
@@ -79,13 +79,13 @@
         {
             "id": "EmmiPlay",
             "name": "EmmiPlay",
-            "description": "Sistema de gestão empresarial moderno e intuitivo. Obtenha insights valiosos em tempo real, gerencie finanças, recursos humanos e a cadeia de suprimentos de forma centralizada.",
+            "description": "O EmmiPlay é a plataforma definitiva para gerenciar telas corporativas, transmitir conteúdo em tempo real e engajar sua equipe com dashboards, vídeos e muito mais.",
             "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
             "link": "https://emmiplay.emminova.com",
             "tags": [
-                "ERP",
-                "Finanças",
-                "Controle"
+                "Digital Signage",
+                "Endomarketing",
+                "Comunicação"
             ],
             "gallery": [
                 {
@@ -102,13 +102,13 @@
         {
             "id": "Emmilitics",
             "name": "Emmilitics",
-            "description": "Análise de dados avançada e dashboards interativos. Transforme informações brutas em decisões estratégicas para o seu negócio através de visualizações imersivas.",
+            "description": "Se sua empresa já testou soluções prontas e ainda não encontrou o que precisa, o Emmilitics resolve: criamos e adaptamos aplicações white-label para suas rotinas reais, com gestão centralizada e BI para decisões mais rápidas.",
             "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2670&auto=format&fit=crop",
             "link": "https://emmilitics.emminova.com",
             "tags": [
-                "Dados",
-                "Dashboard",
-                "Estratégia"
+                "Personalização",
+                "Integrações",
+                "Controle"
             ],
             "gallery": [
                 {
@@ -125,13 +125,13 @@
         {
             "id": "EmmiMap",
             "name": "EmmiMap",
-            "description": "Análise de dados avançada e dashboards interativos. Transforme informações brutas em decisões estratégicas para o seu negócio através de visualizações imersivas.",
+            "description": "Mapeie, documente e compartilhe informações geográficas com facilidade. O EmmiMap oferece uma experiência intuitiva, alta flexibilidade de personalização e ferramentas avançadas para transformar dados em resultados.",
             "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2670&auto=format&fit=crop",
             "link": "https://emmimap.emminova.com",
             "tags": [
-                "Dados",
-                "Dashboard",
-                "Estratégia"
+                "Mapeamento",
+                "Georeferenciamento",
+                "Organização e segurança"
             ],
             "gallery": [
                 {
@@ -148,13 +148,13 @@
         {
             "id": "Emmidocs",
             "name": "Emmidocs",
-            "description": "Análise de dados avançada e dashboards interativos. Transforme informações brutas em decisões estratégicas para o seu negócio através de visualizações imersivas.",
+            "description": "O Emmidocs é a plataforma definitiva para organizar, editar e compartilhar a base de conhecimento da sua empresa. Com um editor rico e exportação impecável para PDF.",
             "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2670&auto=format&fit=crop",
             "link": "https://emmidocs.emminova.com",
             "tags": [
-                "Dados",
-                "Dashboard",
-                "Estratégia"
+                "Controle",
+                "Documentação",
+                "Agildiade e segurança"
             ],
             "gallery": [
                 {
