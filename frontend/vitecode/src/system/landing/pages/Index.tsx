@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { HeroSection } from '@landing/components/landing/HeroSection';
 import { BenefitsSection } from '@landing/components/landing/BenefitsSection';
 import { PublicLayout } from '@landing/components/layout/PublicLayout';
-import { SocialProof } from '../components/landing/SocialProof';
+import { SocialProof } from '@landing/components/landing/SocialProof';
 
 const ImageShowcase = lazy(() => import('@landing/components/landing/ImageShowcase').then(module => ({ default: module.ImageShowcase })));
 const HowItWorks = lazy(() => import('@landing/components/landing/HowItWorks').then(module => ({ default: module.HowItWorks })));
@@ -13,6 +13,7 @@ const CTASection = lazy(() => import('@landing/components/landing/CTASection').t
 const TestimonialsSection = lazy(() => import('@landing/components/landing/TestimonialsSection').then(module => ({ default: module.TestimonialsSection })));
 const DownloadSection = lazy(() => import('@landing/components/landing/DownloadSection').then(module => ({ default: module.DownloadSection })));
 const ProductsCarousel = lazy(() => import('@landing/components/landing/ProductsCarousel').then(module => ({ default: module.ProductsCarousel })));
+const StepsSection = lazy(() => import('@landing/components/landing/StepsSection').then(module => ({ default: module.StepsSection })));
 
 const Index = () => {
     const location = useLocation();
@@ -32,19 +33,20 @@ const Index = () => {
     }, [location]);
 
     return (
-        <PublicLayout>
+        <PublicLayout hideHeaderOnTop>
             <HeroSection />
             <BenefitsSection />
             <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-                {/* <SocialProof /> */}
+                <SocialProof />
                 <ImageShowcase />
                 <ProductsCarousel />
                 <HowItWorks />
+                <StepsSection />
                 <TechFeatures />
                 {/* <DownloadSection /> */}
                 <TestimonialsSection />
                 {/* <PricingTiers /> */}
-                {/* <CTASection /> */}
+                <CTASection />
             </Suspense>
         </PublicLayout>
     );

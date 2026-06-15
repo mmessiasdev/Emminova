@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const DIR = 'c:\\dev\\EmmiPlay\\front\\vitecode\\src\\system\\system\\components\\template-editor';
+const DIR = 'c:\\dev\\Emminova\\front\\vitecode\\src\\system\\system\\components\\template-editor';
 
 const replacements = [
   { rx: /bg-white\/\[0\.0[234]\]/g, val: 'bg-muted/40' },

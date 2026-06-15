@@ -1,0 +1,55 @@
+{
+  "columns": [
+    {
+      "title": "Recursos",
+      "links": [
+        {
+          "label": "Central de Ajuda",
+          "type": "navigate",
+          "target": "/help"
+        },
+        {
+          "label": "Suporte",
+          "type": "navigate",
+          "target": "/contact"
+        },
+        {
+          "label": "Solicitar Demo",
+          "type": "navigate",
+          "target": "/contact/demo"
+        }
+      ]
+    },
+    {
+      "title": "Contato",
+      "links": [
+        {
+          "label": "{branding.contact.email}",
+          "type": "href",
+          "target": "mailto:{branding.contact.email}"
+        },
+        {
+          "label": "WhatsApp",
+          "type": "href",
+          "target": "{branding.contact.whatsappLink}",
+          "blank": true
+        }
+      ]
+    }
+  ],
+  "bottom": {
+    "copyright": "Copyright 2026 {branding.name}. Todos os direitos reservados.",
+    "links": [
+      {
+        "label": "Contato",
+        "type": "navigate",
+        "target": "/contact"
+      },
+      {
+        "label": "Demo Especial",
+        "type": "navigate",
+        "target": "/contact/demo"
+      }
+    ]
+  }
+}

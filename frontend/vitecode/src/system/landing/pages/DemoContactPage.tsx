@@ -52,30 +52,30 @@ const DemoContactPage = () => {
                             </p>
                         </div>
                     </div>
-
-                    <div className="mt-8">
-                        <a
-                            href={whatsappTestLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
-                        >
-                            <MessageSquare className="h-4 w-4" />
-                            Solicitar teste via WhatsApp
-                        </a>
-                    </div>
                 </div>
             </section>
 
             <div className="max-w-4xl mx-auto px-6 pb-32">
                 <ContactForm
-                    title="Solicite seu teste"
-                    submitLabel="Solicitar teste"
+                    title="Solicite seu teste via email"
+                    submitLabel="Encaminhar email"
                     successTitle="Solicitacao enviada com sucesso!"
                     successDescription="Recebemos seu pedido de teste. Nossa equipe vai entrar em contato em breve."
                     messagePlaceholder="Fale sobre sua empresa, quantidade de telas e como voce pretende usar o sistema..."
                     defaultMessage={`Quero solicitar um teste do sistema ${branding.name} para minha empresa.`}
                 />
+
+                <div className="mt-8">
+                    <a
+                        href={whatsappTestLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+                    >
+                        <MessageSquare className="h-4 w-4" />
+                        Quero solicitar via whatsapp
+                    </a>
+                </div>
             </div>
         </PublicLayout>
     )

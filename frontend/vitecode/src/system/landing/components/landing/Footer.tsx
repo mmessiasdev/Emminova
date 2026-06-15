@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { branding } from "@/values/config/branding"
-
+import footerData from "@values/data/footer.json"
 
 export function Footer() {
     const navigate = useNavigate()
@@ -19,6 +19,50 @@ export function Footer() {
     }
 
     const sectionLinkClass = "text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+
+    const parseText = (text: string) => {
+        return text
+            .replace(/{branding\.name}/g, branding.name)
+            .replace(/{branding\.contact\.email}/g, branding.contact.email)
+            .replace(/{branding\.contact\.whatsappLink}/g, branding.contact.whatsappLink);
+    }
+
+    const renderLink = (link: any, idx: number) => {
+        if (link.type === "scroll") {
+            return (
+                <li key={idx}>
+                    <button
+                        type="button"
+                        onClick={() => handleSectionClick(link.target)}
+                        className={`${sectionLinkClass} bg-transparent border-0 p-0 text-left`}
+                    >
+                        {parseText(link.label)}
+                    </button>
+                </li>
+            )
+        }
+        if (link.type === "navigate") {
+            return (
+                <li key={idx}>
+                    <Link to={parseText(link.target)} className={sectionLinkClass}>{parseText(link.label)}</Link>
+                </li>
+            )
+        }
+        if (link.type === "href") {
+            return (
+                <li key={idx}>
+                    <a 
+                        href={parseText(link.target)} 
+                        className={sectionLinkClass}
+                        {...(link.blank ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                        {parseText(link.label)}
+                    </a>
+                </li>
+            )
+        }
+        return null;
+    }
 
     return (
         <footer className="border-t border-border py-12 bg-background">
@@ -40,84 +84,26 @@ export function Footer() {
                         </Link>
                     </div>
 
-                    <div>
-                        <h3 className="text-[13px] font-medium text-foreground">Produto</h3>
-                        <ul className="mt-4 flex flex-col gap-3">
-                            <li>
-                                <button
-                                    type="button"
-                                    onClick={() => handleSectionClick("funcionalidades")}
-                                    className={`${sectionLinkClass} bg-transparent border-0 p-0 text-left`}
-                                >
-                                    Funcionalidades
-                                </button>
-                            </li>
-                            <li>
-                                <Link to="/pricing" className={sectionLinkClass}>Preços</Link>
-                            </li>
-                            <li>
-                                <button
-                                    type="button"
-                                    onClick={() => handleSectionClick("como-funciona")}
-                                    className={`${sectionLinkClass} bg-transparent border-0 p-0 text-left`}
-                                >
-                                    Como Funciona
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="text-[13px] font-medium text-foreground">Recursos</h3>
-                        <ul className="mt-4 flex flex-col gap-3">
-                            <li>
-                                <Link to="/help" className={sectionLinkClass}>Central de Ajuda</Link>
-                            </li>
-                            <li>
-                                <Link to="/contact" className={sectionLinkClass}>Suporte</Link>
-                            </li>
-                            <li>
-                                <Link to="/contact/demo" className={sectionLinkClass}>Solicitar Demo</Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="text-[13px] font-medium text-foreground">Empresa</h3>
-                        <ul className="mt-4 flex flex-col gap-3">
-                            <li>
-                                <Link to="/contact" className={sectionLinkClass}>Contato</Link>
-                            </li>
-                            <li>
-                                <Link to="/pricing" className={sectionLinkClass}>Preços</Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="text-[13px] font-medium text-foreground">Contato</h3>
-                        <ul className="mt-4 flex flex-col gap-3">
-                            <li>
-                                <a href={`mailto:${branding.contact.email}`} className={sectionLinkClass}>
-                                    {branding.contact.email}
-                                </a>
-                            </li>
-                            <li>
-                                <a href={branding.contact.whatsappLink} target="_blank" rel="noopener noreferrer" className={sectionLinkClass}>
-                                    WhatsApp Suporte
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    {footerData.columns.map((col, cIdx) => (
+                        <div key={cIdx}>
+                            <h3 className="text-[13px] font-medium text-foreground">{col.title}</h3>
+                            <ul className="mt-4 flex flex-col gap-3">
+                                {col.links.map((link, lIdx) => renderLink(link, lIdx))}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
                     <p className="text-[13px] text-muted-foreground">
-                        Copyright 2026 {branding.name}. Todos os direitos reservados.
+                        {parseText(footerData.bottom.copyright)}
                     </p>
                     <div className="flex items-center gap-5 text-[13px]">
-                        <Link to="/contact" className={sectionLinkClass}>Contato</Link>
-                        <Link to="/contact/demo" className={sectionLinkClass}>Demo Especial</Link>
+                        {footerData.bottom.links.map((link, idx) => (
+                            <Link key={idx} to={parseText(link.target)} className={sectionLinkClass}>
+                                {parseText(link.label)}
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>

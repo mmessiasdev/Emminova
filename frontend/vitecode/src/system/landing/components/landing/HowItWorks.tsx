@@ -116,10 +116,13 @@ export const HowItWorks = memo(function HowItWorks() {
         setRotate({ x: 4, y: -8 })
     }
 
+    const activeImage = steps[activeStep]?.image
+    const hasImage = activeImage && activeImage.trim() !== ""
+
     return (
         <CinematicSection ref={sectionRef} id="como-funciona" className="py-4 lg:py-6 bg-transparent" noReveal>
             <div ref={containerRef} className="mx-auto max-w-[1400px] px-6 h-full flex flex-col pt-20 lg:pt-20">
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-12 items-center h-full">
+                <div className={`grid grid-cols-1 gap-6 items-center h-full ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "max-w-3xl mx-auto"}`}>
                     <Reveal className="h-full flex flex-col justify-center">
                         <h2 className="text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.5rem,3vw,2.5rem)] mb-3">
                             {howItWorksData.title}
@@ -136,7 +139,7 @@ export const HowItWorks = memo(function HowItWorks() {
                                     onClick={() => {
                                         setActiveStep(index)
                                     }}
-                                    className={`group flex items-start gap-3 lg:gap-4 rounded-[16px] lg:rounded-[24px] p-3 lg:p-4 text-left transition-all duration-500 ${activeStep === index ? "bg-[#0A0A0A] shadow-[0_10px_20px_-5px_rgba(0,0,0,0.5)]" : "hover:bg-white/[0.02]"
+                                    className={`group flex items-start gap-3 lg:gap-4 rounded-[16px] lg:rounded-[24px] p-3 lg:p-4 text-left transition-all duration-500 ${activeStep === index ? "bg-[#0A0A0A]" : ""
                                         }`}
                                 >
                                     <div className={`flex h-7 w-7 lg:h-9 lg:w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-all duration-300 ${activeStep === index ? "bg-white/90 text-black" : "bg-white/5 text-white/30"
@@ -144,7 +147,7 @@ export const HowItWorks = memo(function HowItWorks() {
                                         {step.id}
                                     </div>
                                     <div>
-                                        <h3 className={`text-sm lg:text-base font-bold transition-colors ${activeStep === index ? "text-white" : "text-muted-foreground group-hover:text-white/60"
+                                        <h3 className={`text-sm lg:text-base font-bold transition-colors ${activeStep === index ? "text-white" : "text-muted-foreground"
                                             }`}>
                                             {step.title}
                                         </h3>
@@ -160,56 +163,61 @@ export const HowItWorks = memo(function HowItWorks() {
                     </Reveal>
 
                     {/* Right: Premium 3D Image Card with mouse-reactive tilt */}
-                    <Reveal from="right" className="lg:h-auto lg:max-h-[35vh] xl:max-h-[40vh] flex items-center">
-                        <div
-                            className="relative w-full max-w-[550px] mx-auto"
-                            style={{ perspective: "2000px" }}
-                            onMouseMove={handleMouseMove}
-                            onMouseLeave={handleMouseLeave}
-                        >
+                    {hasImage && (
+                        <Reveal from="right" className="lg:h-auto lg:max-h-[35vh] xl:max-h-[40vh] flex items-center">
                             <div
-                                ref={cardRef}
-                                className="w-full overflow-hidden rounded-[20px] shadow-[0_40px_100px_-15px_rgba(0,0,0,0.8)] transition-transform duration-200 ease-out"
-                                style={{
-                                    transform: `rotateY(${rotate.y}deg) rotateX(${rotate.x}deg) rotateZ(-1deg)`,
-                                    transformStyle: "preserve-3d"
-                                }}
+                                className="relative w-full max-w-[550px] mx-auto"
+                                style={{ perspective: "2000px" }}
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
                             >
-                                <div className="aspect-[16/9] w-full relative bg-[#080808]">
-                                    {steps.map((step: any, index: number) => (
-                                        <img
+                                <div
+                                    ref={cardRef}
+                                    className="w-full overflow-hidden rounded-[20px] shadow-[0_40px_100px_-15px_rgba(0,0,0,0.8)] transition-transform duration-200 ease-out"
+                                    style={{
+                                        transform: `rotateY(${rotate.y}deg) rotateX(${rotate.x}deg) rotateZ(-1deg)`,
+                                        transformStyle: "preserve-3d"
+                                    }}
+                                >
+                                    <div className="aspect-[16/9] w-full relative bg-[#080808]">
+                                        {steps.map((step: any, index: number) => {
+                                            const stepImage = step.image
+                                            const stepHasImage = stepImage && stepImage.trim() !== ""
+                                            if (!stepHasImage) return null
+                                            return (
+                                                <img
+                                                    key={index}
+                                                    src={stepImage}
+                                                    alt={formatText(step.imageAlt, steps.length)}
+                                                    className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-in-out ${activeStep === index
+                                                        ? "opacity-100 scale-100 translate-y-0"
+                                                        : "opacity-0 scale-95 translate-y-4 pointer-events-none"
+                                                        }`}
+                                                    loading="lazy"
+                                                />
+                                            )
+                                        })}
+
+
+
+                                        {/* Inner glow/shadow ring */}
+                                        <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.2)] pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* Step indicator pips */}
+                                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+                                    {steps.map((_, index) => (
+                                        <div
                                             key={index}
-                                            src={step.image}
-                                            alt={formatText(step.imageAlt, steps.length)}
-                                            className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-in-out ${activeStep === index
-                                                ? "opacity-100 scale-100 translate-y-0"
-                                                : "opacity-0 scale-95 translate-y-4 pointer-events-none"
+                                            className={`h-1 rounded-full transition-all duration-500 ${activeStep === index ? "w-8 bg-white/40" : "w-1.5 bg-white/10"
                                                 }`}
-                                            loading="lazy"
                                         />
                                     ))}
-
-                                    {/* Vignette overlays for depth */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 pointer-events-none" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 pointer-events-none" />
-
-                                    {/* Inner glow/shadow ring */}
-                                    <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.5)] pointer-events-none" />
                                 </div>
                             </div>
-
-                            {/* Step indicator pips */}
-                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
-                                {steps.map((_, index) => (
-                                    <div
-                                        key={index}
-                                        className={`h-1 rounded-full transition-all duration-500 ${activeStep === index ? "w-8 bg-white/40" : "w-1.5 bg-white/10"
-                                            }`}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </Reveal>
+                        </Reveal>
+                    )}
                 </div>
             </div>
         </CinematicSection>

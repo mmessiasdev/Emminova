@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 /**
- * Script para capturar screenshots de TODAS as páginas do EmmiPlay (Público + Dashboard).
+ * Script para capturar screenshots de TODAS as páginas do Emminova (Público + Dashboard).
  * 
  * Requisitos:
  * 1. npm install -D playwright
@@ -18,7 +18,7 @@ const OUTPUT_DIR = './screenshots';
 
 // Credenciais de Teste (AJUSTE SE NECESSÁRIO)
 const TEST_AUTH = {
-    email: 'admin@emmiplay.com',
+    email: 'admin@emminova.com',
     password: 'password123'
 };
 

@@ -2,7 +2,7 @@ export const branding = {
   name: "Emminova",
   defaultTheme: "light",
   moleculesColor: "#00BDB6",
-  logo: import.meta.env.VITE_PROJECT_LOGO_URL || "http://localhost:1337/uploads/small_Logo_Emminova_e28e1d2b72.png?436696.799999997", // Fallback if env is missing
+  logo: "/images/branding/logo.png", // Fallback if env is missing
   loginRoute: "/login",
   appStoreUrl: "",
   playStoreUrl: "https://play.google.com/apps/testing/com.emminova.EmmiChat",

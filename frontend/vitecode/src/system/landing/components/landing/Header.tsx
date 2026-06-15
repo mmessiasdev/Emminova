@@ -4,18 +4,19 @@ import { useTheme } from "next-themes"
 import { Button } from "@landing/components/ui/button"
 import { Link, useNavigate } from "react-router-dom"
 import { branding } from "@/values/config/branding"
+import headerData from "@values/data/header.json"
 
-const navLinks = [
-    { label: "Produto", href: "#produto" },
-    { label: "Como Funciona", href: "#como-funciona" },
-    { label: "Funcionalidades", href: "#funcionalidades" },
-    { label: "Preços", href: "/pricing" },
-    ...(branding.appStoreUrl || branding.playStoreUrl ? [{ label: "Aplicativo", href: "#download" }] : []),
-    { label: "Contato", href: "/contact" },
-    { label: "Ajuda", href: "/help" },
-]
+const navLinks = headerData.navLinks.filter(
+    (link: any) => link.showIf !== "hasAppStore" || (branding.appStoreUrl || branding.playStoreUrl)
+)
+const { ctaButtons } = headerData
 
-export function Header() {
+interface HeaderProps {
+    /** Controls header visibility state. When false, nav/CTA elements are hidden. Defaults to true. */
+    scrolled?: boolean
+}
+
+export function Header({ scrolled = true }: HeaderProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
@@ -58,25 +59,29 @@ export function Header() {
     }
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-colors duration-300">
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+            scrolled 
+                ? "bg-background/80 backdrop-blur-md border-b border-border" 
+                : "bg-transparent border-transparent"
+        }`}>
             <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
                 {/* Logo */}
-                <Link to="/" onClick={handleLogoClick} className="flex items-center gap-3 group">
+                <Link to="/" onClick={handleLogoClick} className="flex items-center gap-3 group transition-all duration-500 opacity-100">
                     <img
                         src={branding.logo}
                         alt={`Logo ${branding.name}`}
                         className="h-9 w-auto object-contain rounded-md transition-transform group-hover:scale-105"
                         width="150"
                         height="36"
-                        fetchpriority="high"
+                        fetchPriority="high"
                     />
-                    <span className="text-lg font-bold tracking-tight text-foreground">
+                    <span className="text-lg font-bold tracking-tight text-foreground transition-all duration-500">
                         {branding.name}
                     </span>
                 </Link>
 
                 {/* Center Nav */}
-                <div className="hidden items-center gap-1 lg:flex">
+                <div className={`hidden items-center gap-1 lg:flex transition-all duration-500 ${scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
                     {navLinks.map((link) => (
                         link.href.startsWith("/") && !link.href.includes("#") ? (
                             <Link
@@ -100,7 +105,7 @@ export function Header() {
                 </div>
 
                 {/* Right */}
-                <div className="hidden items-center gap-3 lg:flex">
+                <div className={`hidden items-center gap-3 lg:flex transition-all duration-500 ${scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -112,18 +117,18 @@ export function Header() {
 
                     <Button
                         size="sm"
-                        onClick={() => navigate('/contact/demo')}
+                        onClick={() => navigate(ctaButtons.primary.path)}
                         className="rounded-lg bg-foreground text-background hover:bg-foreground/90 text-[13px] font-medium px-4 h-8 transition-colors"
                     >
-                        Começar Agora
+                        {ctaButtons.primary.label}
                     </Button>
                     <Link to={branding.loginRoute} className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
-                        Login
+                        {ctaButtons.secondary.label}
                     </Link>
                 </div>
 
                 {/* Mobile toggle */}
-                <div className="flex items-center gap-2 lg:hidden">
+                <div className={`flex items-center gap-2 lg:hidden transition-all duration-500 ${scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -170,13 +175,13 @@ export function Header() {
                         <div className="mt-3 flex flex-col gap-2">
 
                             <Button
-                                onClick={() => { navigate('/contact/demo'); setMobileMenuOpen(false); }}
+                                onClick={() => { navigate(ctaButtons.primary.path); setMobileMenuOpen(false); }}
                                 className="rounded-lg bg-foreground text-background hover:bg-foreground/90 text-sm font-medium w-full transition-colors"
                             >
-                                Começar Agora
+                                {ctaButtons.primary.label}
                             </Button>
                             <Link to={branding.loginRoute} className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
-                                Login
+                                {ctaButtons.secondary.label}
                             </Link>
                         </div>
                     </div>

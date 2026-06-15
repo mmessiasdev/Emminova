@@ -1,0 +1,30 @@
+{
+  "navLinks": [
+    {
+      "label": "Como Funciona",
+      "href": "#como-funciona"
+    },
+        {
+      "label": "Nossos produtos",
+      "href": "#produtos"
+    },
+    {
+      "label": "Contato",
+      "href": "/contact"
+    },
+    {
+      "label": "Ajuda",
+      "href": "/help"
+    }
+  ],
+  "ctaButtons": {
+    "primary": {
+      "label": "Começar Agora",
+      "path": "/app"
+    },
+    "secondary": {
+      "label": "Login",
+      "path": "loginRoute"
+    }
+  }
+}

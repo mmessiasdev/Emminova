@@ -9,19 +9,11 @@ import { branding } from '@/values/config/branding';
 import Index from '@landing/pages/Index';
 import PricingPage from '@landing/pages/PricingPage';
 import ContactPage from '@landing/pages/ContactPage';
-import DemoContactPage from '@landing/pages/DemoContactPage';
+// import DemoContactPage from '@landing/pages/DemoContactPage';
 import PublicHelpCenter from '@landing/pages/PublicHelpCenter';
-import PublicProjectPage from '@app/views/pages/PublicProjectPage';
+import DemoContactPage from './system/landing/pages/DemoContactPage';
 
-// App Module (lazy loaded, fully decoupled)
-import { AuthProvider } from '@app/controllers/AuthController';
-import { RequireAuth, RedirectIfAuth } from '@app/views/components/RouteGuard';
-const LoginPage = lazy(() => import('@app/views/pages/LoginPage'));
-const OnboardingPage = lazy(() => import('@app/views/pages/OnboardingPage'));
-const DashboardPage = lazy(() => import('@app/views/pages/DashboardPage'));
-const ProjectDocPage = lazy(() => import('@app/views/pages/ProjectDocPage'));
-const EnterpriseSettingsPage = lazy(() => import('@app/views/pages/EnterpriseSettingsPage'));
-const TeamPage = lazy(() => import('@app/views/pages/TeamPage'));
+
 
 
 const queryClient = new QueryClient();
@@ -119,7 +111,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme={branding.defaultTheme} enableSystem={false}>
-        <AuthProvider>
+        {/* <AuthProvider> */}
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <BrandingCssVariables />
 
@@ -133,28 +125,18 @@ function App() {
             <Route path="/contato" element={<Navigate to="/contact" replace />} />
             <Route path="/contato/demo" element={<Navigate to="/contact/demo" replace />} />
             <Route path="/help" element={<PublicHelpCenter />} />
-            <Route path="/docs/:id" element={<PublicProjectPage />} />
+            {/* <Route path="/docs/:id" element={<PublicProjectPage />} /> */}
 
-            {/* Auth Routes (redirect if already logged in) */}
-            <Route element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background">Carregando...</div>}><RedirectIfAuth /></Suspense>}>
-              <Route path="/login" element={<Suspense fallback={null}><LoginPage /></Suspense>} />
-            </Route>
+          
             <Route path="/auth" element={<Navigate to="/login" replace />} />
 
-            {/* App Routes (require auth) */}
-            <Route element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background">Carregando...</div>}><RequireAuth /></Suspense>}>
-              <Route path="/app" element={<Suspense fallback={null}><DashboardPage /></Suspense>} />
-              <Route path="/app/onboarding" element={<Suspense fallback={null}><OnboardingPage /></Suspense>} />
-              <Route path="/app/settings" element={<Suspense fallback={null}><EnterpriseSettingsPage /></Suspense>} />
-              <Route path="/app/team" element={<Suspense fallback={null}><TeamPage /></Suspense>} />
-              <Route path="/app/project/:id" element={<Suspense fallback={null}><ProjectDocPage /></Suspense>} />
-            </Route>
+         
 
             <Route path="*" element={<Index />} />
           </Routes>
           <Toaster />
         </BrowserRouter>
-        </AuthProvider>
+        {/* </AuthProvider> */}
       </ThemeProvider>
     </QueryClientProvider>
   );

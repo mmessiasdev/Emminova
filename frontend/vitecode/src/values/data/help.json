@@ -1,0 +1,79 @@
+{
+  "header": {
+    "title": "Central de Ajuda",
+    "description": "Aprenda a organizar documentos, gerenciar projetos e aproveitar todos os recursos do Emmidocs."
+  },
+  "guides": [
+    {
+      "title": "Primeiros Passos",
+      "description": "Configure seu ambiente e comece a usar o Emmidocs.",
+      "icon": "Info",
+      "steps": [
+        "Acesse sua conta no painel do Emmidocs.",
+        "Crie seu primeiro projeto ou área de documentação.",
+        "Adicione documentos, processos e convide sua equipe."
+      ]
+    },
+    {
+      "title": "Gestão de Documentos",
+      "description": "Organize arquivos e centralize informações.",
+      "icon": "FileText",
+      "steps": [
+        "Crie categorias ou pastas para organizar conteúdos.",
+        "Faça upload de documentos, manuais, políticas ou procedimentos.",
+        "Utilize versões e histórico para acompanhar alterações."
+      ]
+    },
+    {
+      "title": "Projetos & Colaboração",
+      "description": "Gerencie tarefas e acompanhe entregas.",
+      "icon": "FolderKanban",
+      "steps": [
+        "Crie um novo projeto dentro da plataforma.",
+        "Defina responsáveis, atividades e prazos.",
+        "Acompanhe o progresso e compartilhe atualizações com a equipe."
+      ]
+    }
+  ],
+  "faq": {
+    "title": "Soluções Rápidas & FAQ",
+    "items": [
+      {
+        "title": "Posso armazenar qualquer tipo de documento?",
+        "icon": "FileText",
+        "solution": "Sim. O Emmidocs permite centralizar documentos operacionais, manuais, procedimentos, políticas internas, relatórios e outros arquivos importantes."
+      },
+      {
+        "title": "O sistema possui histórico de alterações?",
+        "icon": "History",
+        "solution": "Sim. O Emmidocs mantém histórico e controle de versões para facilitar auditorias, rastreabilidade e recuperação de informações."
+      },
+      {
+        "title": "Posso usar o sistema com minha equipe?",
+        "icon": "Users",
+        "solution": "Sim. Você pode convidar usuários, compartilhar documentos, distribuir responsabilidades e colaborar em projetos dentro da plataforma."
+      },
+      {
+        "title": "O Emmidocs serve apenas para documentação?",
+        "icon": "FolderKanban",
+        "solution": "Não. Além da gestão documental, o Emmidocs também permite gerenciar projetos, acompanhar tarefas, organizar processos e centralizar operações."
+      }
+    ]
+  },
+  "support": {
+    "title": "Ainda precisa de ajuda?",
+    "description": "Nossa equipe está pronta para ajudar você a implementar e utilizar o Emmidocs da melhor forma.",
+    "buttons": [
+      {
+        "label": "Falar com Suporte",
+        "type": "navigate",
+        "path": "/contact"
+      },
+      {
+        "label": "WhatsApp",
+        "type": "whatsapp",
+        "icon": "MessageSquare"
+      }
+    ]
+  }
+}

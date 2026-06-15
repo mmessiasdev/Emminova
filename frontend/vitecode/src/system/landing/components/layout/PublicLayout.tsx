@@ -9,18 +9,42 @@ import { Molecules } from '@landing/components/ui/molecules';
 import { useGsapLanding } from '@landing/hooks/useGsapLanding';
 import { branding } from '@/values/config/branding';
 
-export function PublicLayout({ children }: { children: React.ReactNode }) {
+interface PublicLayoutProps {
+    children: React.ReactNode;
+    /** When true, the header starts hidden and appears after scrolling 50px. Used by the landing page. */
+    hideHeaderOnTop?: boolean;
+}
+
+export function PublicLayout({ children, hideHeaderOnTop = false }: PublicLayoutProps) {
     useScrollAnimation();
     useGsapLanding();
     const location = useLocation();
     const glowRef = useRef<HTMLDivElement>(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [headerScrolled, setHeaderScrolled] = useState(!hideHeaderOnTop);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    // Scroll detection for header visibility — only active when hideHeaderOnTop is true
+    useEffect(() => {
+        if (!hideHeaderOnTop) {
+            setHeaderScrolled(true);
+            return;
+        }
+
+        const handleScroll = () => {
+            setHeaderScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [hideHeaderOnTop]);
 
     useEffect(() => {
         if (!glowRef.current) return;
@@ -62,8 +86,8 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                 interactivityStrength={.5}
             />
             <div className="relative z-10">
-                <Header />
-                <main key={location.pathname} className="pt-20 animate-fade-in">
+                <Header scrolled={headerScrolled} />
+                <main key={location.pathname} className={`animate-fade-in ${!hideHeaderOnTop ? "pt-20" : ""}`}>
                     {children}
                 </main>
                 <Footer />
@@ -71,3 +95,4 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
         </div>
     );
 }
+
