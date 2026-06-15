@@ -59,11 +59,10 @@ export function Header({ scrolled = true }: HeaderProps) {
     }
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-            scrolled 
-                ? "bg-background/80 backdrop-blur-md border-b border-border" 
-                : "bg-transparent border-transparent"
-        }`}>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+            ? "bg-background/80 backdrop-blur-md border-b border-border"
+            : "bg-transparent border-transparent"
+            }`}>
             <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
                 {/* Logo */}
                 <Link to="/" onClick={handleLogoClick} className="flex items-center gap-3 group transition-all duration-500 opacity-100">
@@ -114,17 +113,21 @@ export function Header({ scrolled = true }: HeaderProps) {
                     >
                         {mounted && (theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
                     </Button>
+                    {ctaButtons.primary.label !== "" && (
+                        <Button
+                            size="sm"
+                            onClick={() => navigate(ctaButtons.primary.path)}
+                            className="rounded-lg bg-foreground text-background hover:bg-foreground/90 text-[13px] font-medium px-4 h-8 transition-colors"
+                        >
+                            {ctaButtons.primary.label}
+                        </Button>
+                    )}
 
-                    <Button
-                        size="sm"
-                        onClick={() => navigate(ctaButtons.primary.path)}
-                        className="rounded-lg bg-foreground text-background hover:bg-foreground/90 text-[13px] font-medium px-4 h-8 transition-colors"
-                    >
-                        {ctaButtons.primary.label}
-                    </Button>
-                    <Link to={branding.loginRoute} className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
-                        {ctaButtons.secondary.label}
-                    </Link>
+                    {ctaButtons.secondary.label !== "" && (
+                        <Link to={branding.loginRoute} className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+                            {ctaButtons.secondary.label}
+                        </Link>
+                    )}
                 </div>
 
                 {/* Mobile toggle */}

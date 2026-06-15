@@ -19,11 +19,11 @@
   ],
   "ctaButtons": {
     "primary": {
-      "label": "Começar Agora",
+      "label": "",
       "path": "/app"
     },
     "secondary": {
-      "label": "Login",
+      "label": "",
       "path": "loginRoute"
     }
   }
