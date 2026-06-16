@@ -11,8 +11,8 @@ export const branding = {
     light: {
       background: "210 20% 98%",
       foreground: "222 47% 11%",
-      primary: "#70D9F7", // Bright Blue
-      secondary: "#cedeff",
+      primary: "#7DA8FF", // Bright Blue
+      secondary: "#dee9fd",
       accent: "210 20% 90%",
       muted: "210 20% 94%",
       destructive: "0 84% 60%",
@@ -24,8 +24,8 @@ export const branding = {
     dark: {
       background: "#000000",
       foreground: "0 0% 100%",
-      primary: "#70D9F7", // Pure White in dark mode as per index.css
-      secondary: "#cedeff",
+      primary: "#7DA8FF", // Bright Blue in dark mode as per index.css
+      secondary: "#dee9fd",
       accent: "216 100% 50%", // Electric Blue
       muted: "0 0% 8%",
       border: "0 0% 10%",
