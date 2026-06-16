@@ -46,11 +46,10 @@ export const HowItWorks = memo(function HowItWorks() {
             const initGSAP = setTimeout(() => {
                 st = ScrollTrigger.create({
                     trigger: content,
-                    start: "center center",
+                    start: "top top+=96",
                     end: `+=${steps.length * 40}%`,
                     pin: true,
                     pinSpacing: true,
-                    pinReparent: true,
                     anticipatePin: 1,
                     scrub: true,
                     invalidateOnRefresh: true,
@@ -132,18 +131,19 @@ export const HowItWorks = memo(function HowItWorks() {
             noReveal
         >
             <div ref={containerRef} className="mx-auto flex max-w-[1400px] flex-col px-6">
-                <Reveal className="mx-auto mb-6 max-w-3xl text-center lg:mb-8">
-                    <h2 className="text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.9rem,3vw,3rem)] mb-3">
-                        {howItWorksData.title}
-                    </h2>
-                    <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground lg:text-base">
-                        {formatText(howItWorksData.description, steps.length)}
-                    </p>
-                </Reveal>
                 <div
                     ref={contentRef}
-                    className={`relative z-10 grid min-h-[70vh] grid-cols-1 items-center gap-8 lg:min-h-[78vh] ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "mx-auto max-w-3xl"}`}
+                    className="relative z-10 flex min-h-[70vh] flex-col justify-center gap-6 lg:min-h-[78vh] lg:gap-10"
                 >
+                    <Reveal className="mx-auto max-w-3xl text-center">
+                        <h2 className="mb-3 text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.9rem,3vw,3rem)]">
+                            {howItWorksData.title}
+                        </h2>
+                        <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground lg:text-base">
+                            {formatText(howItWorksData.description, steps.length)}
+                        </p>
+                    </Reveal>
+                    <div className={`grid grid-cols-1 items-center gap-8 ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "mx-auto max-w-3xl"}`}>
                     <Reveal className="flex h-full flex-col justify-center">
                         <div className="flex flex-col gap-1.5 lg:gap-2">
                             {steps.map((step: any, index: number) => (
@@ -232,6 +232,7 @@ export const HowItWorks = memo(function HowItWorks() {
                             </div>
                         </Reveal>
                     )}
+                    </div>
                 </div>
             </div>
         </CinematicSection>
