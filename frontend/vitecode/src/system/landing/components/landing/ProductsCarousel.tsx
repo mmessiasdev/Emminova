@@ -1,10 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useLayoutEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, ExternalLink, BookOpen, PlayCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@landing/components/ui/button';
 import productsData from '@/values/data/products.json';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type MediaItem = { type: string; url: string };
 type Project = {
@@ -180,6 +184,9 @@ export const ProductsCarousel = () => {
     const { items, title, subtitle, description } = productsData;
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [isHovered, setIsHovered] = useState<number | null>(null);
+    const sectionRef = useRef<HTMLElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const carouselRef = useRef<HTMLDivElement>(null);
 
     // Main embla carousel
     const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -208,15 +215,76 @@ export const ProductsCarousel = () => {
     const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
     const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
+    useLayoutEffect(() => {
+        const section = sectionRef.current;
+        const carousel = carouselRef.current;
+        if (!section || !carousel || !emblaApi) return;
+
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 1024px)", () => {
+            let st: globalThis.ScrollTrigger | null = null;
+
+            const initGSAP = setTimeout(() => {
+                st = ScrollTrigger.create({
+                    trigger: carousel,
+                    start: "center center",
+                    end: `+=${items.length * 30}%`,
+                    pin: true,
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                    onUpdate: (self) => {
+                        const progress = self.progress;
+                        const totalSlides = items.length;
+                        const targetSlide = Math.min(
+                            Math.floor(progress * totalSlides),
+                            totalSlides - 1
+                        );
+                        emblaApi.scrollTo(targetSlide);
+                    },
+                });
+
+                ScrollTrigger.sort();
+                ScrollTrigger.refresh();
+            }, 100);
+
+            return () => {
+                clearTimeout(initGSAP);
+                if (st) st.kill();
+            };
+        });
+
+        const timeouts = [100, 500, 1500].map(time =>
+            setTimeout(() => ScrollTrigger.refresh(), time)
+        );
+
+        const handleLoad = () => {
+            setTimeout(() => ScrollTrigger.refresh(), 100);
+        };
+        window.addEventListener('load', handleLoad);
+
+        if (document.fonts) {
+            document.fonts.ready.then(() => {
+                setTimeout(() => ScrollTrigger.refresh(), 100);
+            });
+        }
+
+        return () => {
+            timeouts.forEach(clearTimeout);
+            window.removeEventListener('load', handleLoad);
+            mm.revert();
+        };
+    }, [emblaApi, items.length]);
+
     return (
-        <section className="relative py-24 overflow-hidden bg-background" id="produtos">
+        <section ref={sectionRef} className="relative py-24 overflow-hidden bg-background" id="produtos">
             {/* Background Effects */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px]" />
             </div>
 
-            <div className="container relative z-10 mx-auto px-4 md:px-6 max-w-7xl">
+            <div ref={containerRef} className="container relative z-10 mx-auto px-4 md:px-6 max-w-7xl">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 ">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -259,6 +327,8 @@ export const ProductsCarousel = () => {
                     </div>
                 </div>
 
+                {/* Pinned Carousel Area */}
+                <div ref={carouselRef} className="flex flex-col items-center justify-center min-h-[70vh]">
                 {/* Embla Carousel Viewport */}
                 <div className="overflow-hidden w-full -mx-4 px-4 md:mx-0 md:px-0 py-4" ref={emblaRef}>
                     <div className="flex gap-6 md:gap-8 ml-[40px] mb-[40px] mr-[40px]">
@@ -363,6 +433,7 @@ export const ProductsCarousel = () => {
                         <ChevronRight className="w-5 h-5" />
                     </Button>
                 </div>
+                </div>{/* end carouselRef */}
             </div>
 
             <AnimatePresence>

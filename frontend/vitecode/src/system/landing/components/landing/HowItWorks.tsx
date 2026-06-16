@@ -29,12 +29,14 @@ export const HowItWorks = memo(function HowItWorks() {
     const cardRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
     const sectionRef = useRef<HTMLElement>(null)
+    const contentRef = useRef<HTMLDivElement>(null)
     const [rotate, setRotate] = useState({ x: 4, y: -8 })
 
     useLayoutEffect(() => {
         const section = sectionRef.current
         const container = containerRef.current
-        if (!section || !container) return
+        const content = contentRef.current
+        if (!section || !container || !content) return
 
         const mm = gsap.matchMedia()
 
@@ -43,9 +45,9 @@ export const HowItWorks = memo(function HowItWorks() {
             
             const initGSAP = setTimeout(() => {
                 st = ScrollTrigger.create({
-                    trigger: section,
-                    start: "top top",
-                    end: `+=${steps.length * 80}%`,
+                    trigger: content,
+                    start: "center center",
+                    end: `+=${steps.length * 40}%`,
                     pin: true,
                     scrub: true,
                     invalidateOnRefresh: true,
@@ -121,16 +123,18 @@ export const HowItWorks = memo(function HowItWorks() {
 
     return (
         <CinematicSection ref={sectionRef} id="como-funciona" className="py-4 lg:py-6 bg-transparent" noReveal>
-            <div ref={containerRef} className="mx-auto max-w-[1400px] px-6 h-full flex flex-col pt-20 lg:pt-20">
-                <div className={`grid grid-cols-1 gap-6 items-center h-full ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "max-w-3xl mx-auto"}`}>
-                    <Reveal className="h-full flex flex-col justify-center">
-                        <h2 className="text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.5rem,3vw,2.5rem)] mb-3">
-                            {howItWorksData.title}
-                        </h2>
-                        <p className="text-xs leading-relaxed text-muted-foreground lg:text-base mb-4 lg:mb-6 line-clamp-1 lg:line-clamp-2">
-                            {formatText(howItWorksData.description, steps.length)}
-                        </p>
+            <div ref={containerRef} className="mx-auto max-w-[1400px] px-6 flex flex-col">
+                <Reveal className="mb-8 lg:mb-12">
+                    <h2 className="text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.5rem,3vw,2.5rem)] mb-3">
+                        {howItWorksData.title}
+                    </h2>
+                    <p className="text-xs leading-relaxed text-muted-foreground lg:text-base line-clamp-1 lg:line-clamp-2">
+                        {formatText(howItWorksData.description, steps.length)}
+                    </p>
+                </Reveal>
 
+                <div ref={contentRef} className={`grid grid-cols-1 gap-6 items-center h-full ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "max-w-3xl mx-auto"}`}>
+                    <Reveal className="h-full flex flex-col justify-center">
                         <div className="flex flex-col gap-1.5 lg:gap-2">
                             {steps.map((step: any, index: number) => (
                                 <button
