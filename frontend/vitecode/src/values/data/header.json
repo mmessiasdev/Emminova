@@ -15,6 +15,10 @@
     {
       "label": "Ajuda",
       "href": "/help"
+    },
+       {
+      "label": "Sobre nós",
+      "href": "#aboutus"
     }
   ],
   "ctaButtons": {

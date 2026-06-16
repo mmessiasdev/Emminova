@@ -1,0 +1,33 @@
+{
+    "title": "Sobre a {brandingName}",
+    "subtitle": "Inovação que transforma negócios",
+    "description": "A {brandingName} nasceu em 2024 por M. Messias com a visão de criar soluções tecnológicas que realmente fazem a diferença no dia a dia das empresas. Com uma equipe apaixonada por inovação, desenvolvemos produtos que automatizam processos, conectam pessoas e impulsionam resultados. Nossa missão é simplificar o complexo e entregar ferramentas que tragam valor real para nossos clientes.",
+    "image": "/images/branding/mmessias.png",
+    "socialLinks": [
+        {
+            "icon": "Linkedin",
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/company/emminova"
+        },
+        {
+            "icon": "Instagram",
+            "label": "Instagram",
+            "url": "https://www.instagram.com/emminova"
+        },
+        {
+            "icon": "MessageCircle",
+            "label": "WhatsApp",
+            "url": "https://wa.me/557791057040"
+        },
+        {
+            "icon": "Mail",
+            "label": "Email",
+            "url": "mailto:emminovacorporate@gmail.com"
+        },
+        {
+            "icon": "Globe",
+            "label": "Site",
+            "url": "https://emminova.com"
+        }
+    ]
+}

@@ -11,6 +11,7 @@ const TechFeatures = lazy(() => import('@landing/components/landing/TechFeatures
 const PricingTiers = lazy(() => import('@landing/components/landing/PricingTiers').then(module => ({ default: module.PricingTiers })));
 const CTASection = lazy(() => import('@landing/components/landing/CTASection').then(module => ({ default: module.CTASection })));
 const TestimonialsSection = lazy(() => import('@landing/components/landing/TestimonialsSection').then(module => ({ default: module.TestimonialsSection })));
+const AboutUsSection = lazy(() => import('@landing/components/landing/AboutUsSection').then(module => ({ default: module.AboutUsSection })));
 const DownloadSection = lazy(() => import('@landing/components/landing/DownloadSection').then(module => ({ default: module.DownloadSection })));
 const ProductsCarousel = lazy(() => import('@landing/components/landing/ProductsCarousel').then(module => ({ default: module.ProductsCarousel })));
 const StepsSection = lazy(() => import('@landing/components/landing/StepsSection').then(module => ({ default: module.StepsSection })));
@@ -45,6 +46,7 @@ const Index = () => {
                 <TechFeatures />
                 {/* <DownloadSection /> */}
                 <TestimonialsSection />
+                <AboutUsSection />
                 {/* <PricingTiers /> */}
                 <CTASection />
             </Suspense>
