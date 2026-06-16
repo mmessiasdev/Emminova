@@ -9,6 +9,7 @@
             "description": "O Benefeer é o app ideal para empresas que querem fidelizar clientes, fortalecer parceiros locais e criar novas fontes de valor com um ecossistema completo de serviços, cursos e vagas de emprego.",
             "logo": "/images/benefeer.png",
             "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2670&auto=format&fit=crop",
+            "link": "https://benefeer.emminova.com",
             "tags": [
                 "SVA",
                 "Fidelização",
@@ -53,6 +54,7 @@
             "logo": "/images/emmichat.png",
             "description": "Automatize agendamentos, estoque e fluxos de WhatsApp personalizados.",
             "image": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format",
+            "link": "https://emmichat.emminova.com",
             "tags": [
                 "IA",
                 "Automação",

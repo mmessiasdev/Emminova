@@ -155,7 +155,7 @@ const ProjectPopup = ({ project, onClose }: { project: Project; onClose: () => v
                     </p>
 
                     <div className="mt-auto space-y-4">
-                        <Link to={project.link} className="block w-full">
+                        <Link to={project.link} className="block w-full" target="_blank">
                             <Button className="w-full h-12 text-base font-semibold group relative overflow-hidden rounded-xl">
                                 <span className="relative z-10 flex items-center gap-2">
                                     Acessar Solução
