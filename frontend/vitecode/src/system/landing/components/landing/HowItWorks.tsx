@@ -49,6 +49,9 @@ export const HowItWorks = memo(function HowItWorks() {
                     start: "center center",
                     end: `+=${steps.length * 40}%`,
                     pin: true,
+                    pinSpacing: true,
+                    pinReparent: true,
+                    anticipatePin: 1,
                     scrub: true,
                     invalidateOnRefresh: true,
                     onUpdate: (self) => {
@@ -122,19 +125,26 @@ export const HowItWorks = memo(function HowItWorks() {
     const hasImage = activeImage && activeImage.trim() !== ""
 
     return (
-        <CinematicSection ref={sectionRef} id="como-funciona" className="py-4 lg:py-6 bg-transparent" noReveal>
-            <div ref={containerRef} className="mx-auto max-w-[1400px] px-6 flex flex-col">
-                <Reveal className="mb-8 lg:mb-12">
-                    <h2 className="text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.5rem,3vw,2.5rem)] mb-3">
+        <CinematicSection
+            ref={sectionRef}
+            id="como-funciona"
+            className="relative z-20 overflow-hidden bg-background py-10 lg:py-16"
+            noReveal
+        >
+            <div ref={containerRef} className="mx-auto flex max-w-[1400px] flex-col px-6">
+                <Reveal className="mx-auto mb-6 max-w-3xl text-center lg:mb-8">
+                    <h2 className="text-2xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[clamp(1.9rem,3vw,3rem)] mb-3">
                         {howItWorksData.title}
                     </h2>
-                    <p className="text-xs leading-relaxed text-muted-foreground lg:text-base line-clamp-1 lg:line-clamp-2">
+                    <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground lg:text-base">
                         {formatText(howItWorksData.description, steps.length)}
                     </p>
                 </Reveal>
-
-                <div ref={contentRef} className={`grid grid-cols-1 gap-6 items-center h-full ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "max-w-3xl mx-auto"}`}>
-                    <Reveal className="h-full flex flex-col justify-center">
+                <div
+                    ref={contentRef}
+                    className={`relative z-10 grid min-h-[70vh] grid-cols-1 items-center gap-8 lg:min-h-[78vh] ${hasImage ? "lg:grid-cols-2 lg:gap-12" : "mx-auto max-w-3xl"}`}
+                >
+                    <Reveal className="flex h-full flex-col justify-center">
                         <div className="flex flex-col gap-1.5 lg:gap-2">
                             {steps.map((step: any, index: number) => (
                                 <button
@@ -168,7 +178,7 @@ export const HowItWorks = memo(function HowItWorks() {
 
                     {/* Right: Premium 3D Image Card with mouse-reactive tilt */}
                     {hasImage && (
-                        <Reveal from="right" className="lg:h-auto lg:max-h-[35vh] xl:max-h-[40vh] flex items-center">
+                        <Reveal from="right" className="flex items-center lg:h-auto lg:max-h-[35vh] xl:max-h-[40vh]">
                             <div
                                 className="relative w-full max-w-[550px] mx-auto"
                                 style={{ perspective: "2000px" }}
